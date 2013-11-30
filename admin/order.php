@@ -4462,6 +4462,22 @@ elseif ($_REQUEST['act'] == 'get_goods_info')
     $goods[] = array('order_id' => $order_id, 'str' => $str);
     make_json_result($goods);
 }
+elseif ($_REQUEST['act'] == 'order_confirm')
+{
+    include_once(ROOT_PATH . 'includes/lib_order.php');
+    $order_id = intval($_REQUEST['order_id']);
+    $order = order_info($order_id);
+    $clerk_id = $_REQUEST['clerk_id'];
+    if ($order && $order['user_id'] == $clerk_id)
+    {
+        $result['result'] = 'success';
+    }
+    else
+    {
+        $result['result'] = 'failed';
+    }
+    echo json_encode($result);
+}
 
 /**
  * 取得状态列表
