@@ -696,7 +696,7 @@ elseif ($_REQUEST['act'] == 'remove')
 elseif ($_REQUEST['act'] == 'login_verify')
 {
     header('Content-Type: text/html; charset=utf-8');
-    $username = $_GET['check_name'];
+    $username = $_GET['user_name'];
     $password = trim($_GET['password']);
     if (!$username || !$password)
     {
