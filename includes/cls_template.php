@@ -415,7 +415,9 @@ class cls_template
         }
         else
         {
-            $tag_sel = array_shift(explode(' ', $tag));
+//             $tag_sel = array_shift(explode(' ', $tag)); //fix Strict Standards: Only variables should be passed by reference
+            $tag_arr = explode(' ', $tag);
+            $tag_sel = array_shift($tag_arr);
             switch ($tag_sel)
             {
                 case 'if':
