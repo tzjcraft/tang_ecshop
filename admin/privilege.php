@@ -692,6 +692,25 @@ elseif ($_REQUEST['act'] == 'remove')
     ecs_header("Location: $url\n");
     exit;
 }
+/* 登录验证接口 */
+elseif ($_REQUEST['act'] == 'login_verify')
+{
+    header('Content-Type: text/html; charset=utf-8');
+    $username = $_GET['check_name'];
+    $password = trim($_GET['password']);
+    if (!$username || !$password)
+    {
+        $result['result'] = 'failed';
+        $result['message'] = '用户名或者密码不匹配';
+    }
+    else
+    {
+        $result = admin_verify($username, $password);
+    }
+    isset($result['message']) ? $result['message'] = urlencode($result['message']) : true;
+    isset($result['user_info']['name']) ? $result['user_info']['name'] = urlencode($result['user_info']['name']) : true;
+    echo urldecode(json_encode($result));
+}
 
 /* 获取管理员列表 */
 function get_admin_userlist()
@@ -734,6 +753,62 @@ function get_role_list()
             'FROM ' .$GLOBALS['ecs']->table('role');
     $list = $GLOBALS['db']->getAll($sql);
     return $list;
+}
+
+function admin_verify($username, $password)
+{
+    if (!$username || !$password)
+    {
+        $login_verify['result'] = 'failed';
+        $login_verify['message'] = '用户名或者密码不匹配';
+        return $login_verify;
+    }
+    else
+    {
+        $username = iconv("gbk", "utf-8", $username);
+        $sql = "SELECT `ec_salt` FROM " . $GLOBALS['ecs']->table('admin_user') . "WHERE user_name = '" . $username . "'";
+        $ec_salt = $GLOBALS['db']->getOne($sql);
+        if (!empty($ec_salt))
+        {
+            /* 检查密码是否正确 */
+            $sql = "SELECT user_id, user_name, password, last_login, action_list, last_login,suppliers_id,ec_salt" .
+                    " FROM " . $GLOBALS['ecs']->table('admin_user') .
+                    " WHERE user_name = '" . $username . "' AND password = '" . md5(md5($password) . $ec_salt) . "'";
+        }
+        else
+        {
+            /* 检查密码是否正确 */
+            $sql = "SELECT user_id, user_name, password, last_login, action_list, last_login,suppliers_id,ec_salt" .
+                    " FROM " . $GLOBALS['ecs']->table('admin_user') .
+                    " WHERE user_name = '" . $username . "' AND password = '" . md5($password) . "'";
+        }
+
+        $row = $GLOBALS['db']->getRow($sql);
+        if ($row)
+        {
+            if (!empty($row['suppliers_id']))
+            {
+                $supplier_is_check = suppliers_list_info(' is_check = 1 AND suppliers_id = ' . $row['suppliers_id']);
+                if (empty($supplier_is_check))
+                {
+                    $login_verify['result'] = 'failed';
+                    $login_verify['message'] = '无效的用户';
+                    return $login_verify;
+                }
+            }
+            $login_verify['result'] = 'success';
+            $login_verify['user_info']['user_id'] = $row['user_id'];
+            $login_verify['user_info']['name'] = $row['user_name'];
+            return $login_verify;
+        }
+        else
+        {
+            $login_verify['result'] = 'failed';
+            $login_verify['message'] = '用户名或者密码不匹配';
+            return $login_verify;
+        }
+    }
+
 }
 
 ?>
