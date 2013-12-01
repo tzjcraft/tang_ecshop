@@ -107,6 +107,7 @@ $_LANG['flow_js']['district_not_null'] = '請您選擇收貨人所在區域！';
 $_LANG['flow_js']['invalid_email'] = '您輸入的郵件地址不是一個合法的郵件地址。';
 $_LANG['flow_js']['address_not_null'] = '收貨人的詳細地址不能為空！';
 $_LANG['flow_js']['tele_not_null'] = '電話不能為空！';
+$_LANG['flow_js']['mobile_not_null'] = '手機不能為空！';
 $_LANG['flow_js']['shipping_not_null'] = '請您選擇配送方式！';
 $_LANG['flow_js']['payment_not_null'] = '請您選擇支付方式！';
 $_LANG['flow_js']['goodsattr_style'] = 1;

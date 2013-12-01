@@ -109,6 +109,7 @@ $_LANG['flow_js']['district_not_null'] = 'Please select a district of consignee!
 $_LANG['flow_js']['invalid_email'] = 'Please enter a valid email address.';
 $_LANG['flow_js']['address_not_null'] = 'Please enter an address!';
 $_LANG['flow_js']['tele_not_null'] = 'Please enter a phone number!';
+$_LANG['flow_js']['mobile_not_null'] = 'Please enter a mobile number!';
 $_LANG['flow_js']['shipping_not_null'] = 'Please select a shipping method!';
 $_LANG['flow_js']['payment_not_null'] = 'Please select a payment mode!';
 $_LANG['flow_js']['goodsattr_style'] = 1;
