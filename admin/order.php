@@ -4465,8 +4465,8 @@ elseif ($_REQUEST['act'] == 'get_goods_info')
 elseif ($_REQUEST['act'] == 'order_confirm')
 {
     include_once(ROOT_PATH . 'includes/lib_order.php');
-    $order_id = intval($_REQUEST['order_id']);
-    $order = order_info($order_id);
+    $order_sn = trim($_REQUEST['order_number']);
+    $order = order_info(null, $order_sn);
     $clerk_id = $_REQUEST['clerk_id'];
     if ($order && $order['user_id'] == $clerk_id)
     {
