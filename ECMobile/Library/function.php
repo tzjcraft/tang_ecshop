@@ -67,20 +67,21 @@ function GZ_user_info($user_id)
     	$level = 1;
     }
 
-	return array(
-		'id' => $user_info['user_id'],
-		'name'=>$user_info['user_name'],
-		'rank_name'=>$user_info['user_rank_name'],
-		'rank_level' => $level,
-		'collection_num' => $collection_num,
+    return array(
+        'id' => $user_info['user_id'],
+        'name' => $user_info['user_name'],
+        'rank_name'=>$user_info['user_rank_name'],
+        'rank_level' => $level,
+        'collection_num' => $collection_num,
+        'integral' => $user_info['pay_points'],
         'email' => $user_info['email'],
-		"order_num" => array(
-			'await_pay' => $await_pay,
-			'await_ship' => $await_ship,
-			'shipped' => $shipped,
-			'finished' =>$finished
-		)
-	);
+        "order_num" => array(
+            'await_pay' => $await_pay,
+            'await_ship' => $await_ship,
+            'shipped' => $shipped,
+            'finished' => $finished
+        )
+    );
 }
 
 /**
