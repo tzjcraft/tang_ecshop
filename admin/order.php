@@ -4467,10 +4467,34 @@ elseif ($_REQUEST['act'] == 'order_confirm')
     include_once(ROOT_PATH . 'includes/lib_order.php');
     $order_sn = trim($_REQUEST['order_number']);
     $order = order_info(null, $order_sn);
-    $clerk_id = $_REQUEST['clerk_id'];
-    if ($order && $order['user_id'] == $clerk_id)
+
+    $username = isset($_REQUEST['username']) ? trim($_REQUEST['username']) : '';
+    $password = isset($_REQUEST['password']) ? trim($_REQUEST['password']) : '';
+    $user = is_admin_user($username, $password);
+
+    if ($order && $user)
     {
-        $result['result'] = 'success';
+        $operable_list = operable_list_by_action($order, $user['action_list']);
+        if (!isset($operable_list['confirm']))
+        {
+            $result['result'] = 'failed';
+        }
+        else
+        {
+            /* 标记订单为已确认 */
+            update_order($order['order_id'], array('order_status' => OS_CONFIRMED, 'confirm_time' => gmtime()));
+            update_order_amount($order['order_id']);
+
+            /* 记录log */
+            order_action($order['order_sn'], OS_CONFIRMED, SS_UNSHIPPED, PS_UNPAYED, null);
+
+            /* 如果原来状态不是“未确认”，且使用库存，且下订单时减库存，则减少库存 */
+            if ($order['order_status'] != OS_UNCONFIRMED && $_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE)
+            {
+                change_order_goods_storage($order['order_id'], true, SDT_PLACE);
+            }
+            $result['result'] = 'success';
+        }
     }
     else
     {
@@ -6354,4 +6378,297 @@ function get_site_root_url()
     return 'http://' . $_SERVER['HTTP_HOST'] . str_replace('/' . ADMIN_PATH . '/order.php', '', PHP_SELF);
 
 }
+
+/**
+ * 确认订单接口 验证用户名密码
+ * @param string $username 用户名
+ * @param string $password 密码
+ * @return array()
+ */
+function is_admin_user($username, $password)
+{
+    $sql = "SELECT `ec_salt` FROM " . $GLOBALS['ecs']->table('admin_user') . "WHERE user_name = '" . $username . "'";
+    $ec_salt = $GLOBALS['db']->getOne($sql);
+    if (!empty($ec_salt))
+    {
+        /* 检查密码是否正确 */
+        $sql = "SELECT user_id, user_name, password, last_login, action_list, last_login,suppliers_id,ec_salt" .
+                " FROM " . $GLOBALS['ecs']->table('admin_user') .
+                " WHERE user_name = '" . $username . "' AND password = '" . md5(md5($password) . $ec_salt) . "'";
+    }
+    else
+    {
+        /* 检查密码是否正确 */
+        $sql = "SELECT user_id, user_name, password, last_login, action_list, last_login,suppliers_id,ec_salt" .
+                " FROM " . $GLOBALS['ecs']->table('admin_user') .
+                " WHERE user_name = '" . $username . "' AND password = '" . md5($password) . "'";
+    }
+    $row = $GLOBALS['db']->getRow($sql);
+    if ($row)
+    {
+        // 检查是否为供货商的管理员 所属供货商是否有效
+        if (!empty($row['suppliers_id']))
+        {
+            $supplier_is_check = suppliers_list_info(' is_check = 1 AND suppliers_id = ' . $row['suppliers_id']);
+            if (empty($supplier_is_check))
+            {
+                return null;
+            }
+        }
+        return $row;
+    }
+    else
+    {
+        return null;
+    }
+}
+
+/**
+ * 订单确认API 返回某个订单可执行的操作列表，包括权限判断
+ * @param   array   $order      订单信息 order_status, shipping_status, pay_status
+ * @param   string   $actions   用户行为
+ * @param   bool    $is_cod     支付方式是否货到付款
+ * @return  array   可执行的操作  confirm, pay, unpay, prepare, ship, unship, receive, cancel, invalid, return, drop
+ * 格式 array('confirm' => true, 'pay' => true)
+ */
+function operable_list_by_action($order, $actions = null)
+{
+    /* 取得订单状态、发货状态、付款状态 */
+    $os = $order['order_status'];
+    $ss = $order['shipping_status'];
+    $ps = $order['pay_status'];
+    if ($actions == 'all')
+    {
+        $priv_list = array('os' => true, 'ss' => true, 'ps' => true, 'edit' => true);
+    }
+    else
+    {
+        $actions = ',' . $actions . ',';
+        $priv_list = array(
+            'os' => strpos($actions, ',order_os_edit,') !== false,
+            'ss' => strpos($actions, ',order_ss_edit,') !== false,
+            'ps' => strpos($actions, ',order_ps_edit,') !== false,
+            'edit' => strpos($actions, ',order_edit,') !== false
+        );
+    }
+
+    /* 取得订单支付方式是否货到付款 */
+    $payment = payment_info($order['pay_id']);
+    $is_cod = $payment['is_cod'] == 1;
+
+    /* 根据状态返回可执行操作 */
+    $list = array();
+    if (OS_UNCONFIRMED == $os)
+    {
+        /* 状态：未确认 => 未付款、未发货 */
+        if ($priv_list['os'])
+        {
+            $list['confirm'] = true; // 确认
+            $list['invalid'] = true; // 无效
+            $list['cancel'] = true; // 取消
+            if ($is_cod)
+            {
+                /* 货到付款 */
+                if ($priv_list['ss'])
+                {
+                    $list['prepare'] = true; // 配货
+                    $list['split'] = true; // 分单
+                }
+            }
+            else
+            {
+                /* 不是货到付款 */
+                if ($priv_list['ps'])
+                {
+                    $list['pay'] = true;  // 付款
+                }
+            }
+        }
+    }
+    elseif (OS_CONFIRMED == $os || OS_SPLITED == $os || OS_SPLITING_PART == $os)
+    {
+        /* 状态：已确认 */
+        if (PS_UNPAYED == $ps)
+        {
+            /* 状态：已确认、未付款 */
+            if (SS_UNSHIPPED == $ss || SS_PREPARING == $ss)
+            {
+                /* 状态：已确认、未付款、未发货（或配货中） */
+                if ($priv_list['os'])
+                {
+                    $list['cancel'] = true; // 取消
+                    $list['invalid'] = true; // 无效
+                }
+                if ($is_cod)
+                {
+                    /* 货到付款 */
+                    if ($priv_list['ss'])
+                    {
+                        if (SS_UNSHIPPED == $ss)
+                        {
+                            $list['prepare'] = true; // 配货
+                        }
+                        $list['split'] = true; // 分单
+                    }
+                }
+                else
+                {
+                    /* 不是货到付款 */
+                    if ($priv_list['ps'])
+                    {
+                        $list['pay'] = true; // 付款
+                    }
+                }
+            }
+            /* 状态：已确认、未付款、发货中 */
+            elseif (SS_SHIPPED_ING == $ss || SS_SHIPPED_PART == $ss)
+            {
+                // 部分分单
+                if (OS_SPLITING_PART == $os)
+                {
+                    $list['split'] = true; // 分单
+                }
+                $list['to_delivery'] = true; // 去发货
+            }
+            else
+            {
+                /* 状态：已确认、未付款、已发货或已收货 => 货到付款 */
+                if ($priv_list['ps'])
+                {
+                    $list['pay'] = true; // 付款
+                }
+                if ($priv_list['ss'])
+                {
+                    if (SS_SHIPPED == $ss)
+                    {
+                        $list['receive'] = true; // 收货确认
+                    }
+                    $list['unship'] = true; // 设为未发货
+                    if ($priv_list['os'])
+                    {
+                        $list['return'] = true; // 退货
+                    }
+                }
+            }
+        }
+        else
+        {
+            /* 状态：已确认、已付款和付款中 */
+            if (SS_UNSHIPPED == $ss || SS_PREPARING == $ss)
+            {
+                /* 状态：已确认、已付款和付款中、未发货（配货中） => 不是货到付款 */
+                if ($priv_list['ss'])
+                {
+                    if (SS_UNSHIPPED == $ss)
+                    {
+                        $list['prepare'] = true; // 配货
+                    }
+                    $list['split'] = true; // 分单
+                }
+                if ($priv_list['ps'])
+                {
+                    $list['unpay'] = true; // 设为未付款
+                    if ($priv_list['os'])
+                    {
+                        $list['cancel'] = true; // 取消
+                    }
+                }
+            }
+            /* 状态：已确认、未付款、发货中 */
+            elseif (SS_SHIPPED_ING == $ss || SS_SHIPPED_PART == $ss)
+            {
+                // 部分分单
+                if (OS_SPLITING_PART == $os)
+                {
+                    $list['split'] = true; // 分单
+                }
+                $list['to_delivery'] = true; // 去发货
+            }
+            else
+            {
+                /* 状态：已确认、已付款和付款中、已发货或已收货 */
+                if ($priv_list['ss'])
+                {
+                    if (SS_SHIPPED == $ss)
+                    {
+                        $list['receive'] = true; // 收货确认
+                    }
+                    if (!$is_cod)
+                    {
+                        $list['unship'] = true; // 设为未发货
+                    }
+                }
+                if ($priv_list['ps'] && $is_cod)
+                {
+                    $list['unpay'] = true; // 设为未付款
+                }
+                if ($priv_list['os'] && $priv_list['ss'] && $priv_list['ps'])
+                {
+                    $list['return'] = true; // 退货（包括退款）
+                }
+            }
+        }
+    }
+    elseif (OS_CANCELED == $os)
+    {
+        /* 状态：取消 */
+        if ($priv_list['os'])
+        {
+            $list['confirm'] = true;
+        }
+        if ($priv_list['edit'])
+        {
+            $list['remove'] = true;
+        }
+    }
+    elseif (OS_INVALID == $os)
+    {
+        /* 状态：无效 */
+        if ($priv_list['os'])
+        {
+            $list['confirm'] = true;
+        }
+        if ($priv_list['edit'])
+        {
+            $list['remove'] = true;
+        }
+    }
+    elseif (OS_RETURNED == $os)
+    {
+        /* 状态：退货 */
+        if ($priv_list['os'])
+        {
+            $list['confirm'] = true;
+        }
+    }
+
+    /* 修正发货操作 */
+    if (!empty($list['split']))
+    {
+        /* 如果是团购活动且未处理成功，不能发货 */
+        if ($order['extension_code'] == 'group_buy')
+        {
+            include_once(ROOT_PATH . 'includes/lib_goods.php');
+            $group_buy = group_buy_info(intval($order['extension_id']));
+            if ($group_buy['status'] != GBS_SUCCEED)
+            {
+                unset($list['split']);
+                unset($list['to_delivery']);
+            }
+        }
+
+        /* 如果部分发货 不允许 取消 订单 */
+        if (order_deliveryed($order['order_id']))
+        {
+            $list['return'] = true; // 退货（包括退款）
+            unset($list['cancel']); // 取消
+        }
+    }
+
+    /* 售后 */
+    $list['after_service'] = true;
+
+    return $list;
+}
+
 ?>
