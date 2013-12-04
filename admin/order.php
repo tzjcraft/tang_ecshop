@@ -4474,7 +4474,7 @@ elseif ($_REQUEST['act'] == 'order_confirm')
 
     if ($order && $user)
     {
-        $operable_list = operable_list_by_action($order, $user['action_list']);
+        $operable_list = operable_list_by_user($order, $user);
         if (!isset($operable_list['confirm']))
         {
             $result['result'] = 'failed';
@@ -6426,17 +6426,18 @@ function is_admin_user($username, $password)
 /**
  * 订单确认API 返回某个订单可执行的操作列表，包括权限判断
  * @param   array   $order      订单信息 order_status, shipping_status, pay_status
- * @param   string   $actions   用户行为
+ * @param   string   $user   admin user
  * @param   bool    $is_cod     支付方式是否货到付款
  * @return  array   可执行的操作  confirm, pay, unpay, prepare, ship, unship, receive, cancel, invalid, return, drop
  * 格式 array('confirm' => true, 'pay' => true)
  */
-function operable_list_by_action($order, $actions = null)
+function operable_list_by_user($order, $user)
 {
     /* 取得订单状态、发货状态、付款状态 */
     $os = $order['order_status'];
     $ss = $order['shipping_status'];
     $ps = $order['pay_status'];
+    $actions = $user && isset($user['action_list']) ? $user['action_list'] : null;
     if ($actions == 'all')
     {
         $priv_list = array('os' => true, 'ss' => true, 'ps' => true, 'edit' => true);
