@@ -276,7 +276,6 @@
       <div align="right"><strong>{$lang.label_operable_act}</strong> </div></td>
     <td colspan="5">
         {if $order.pay_status == 2 && $order.shipping_status != 1 && $order.order_status == 1 }
-        <input name="invoice_no" type="text" style="color:#00F" value="" placeholder="{$lang.quick_ship_prompt}"/>
         <input name="to_shipping" type="submit" style="color:#F00" value="{$lang.op_quick_ship}" class="button" />
         {/if}
         {if $operable_list.confirm}
