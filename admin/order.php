@@ -5085,24 +5085,23 @@ elseif ($_REQUEST['act'] == 'order_confirm')
     if ($order && $user)
     {
         $operable_list = operable_list_by_user($order, $user);
-        if (!isset($operable_list['confirm']))
+        if (!isset($operable_list['receive']))
         {
             $result['result'] = 'failed';
         }
         else
         {
-            /* 标记订单为已确认 */
-            update_order($order['order_id'], array('order_status' => OS_CONFIRMED, 'confirm_time' => gmtime()));
-            update_order_amount($order['order_id']);
-
-            /* 记录log */
-            order_action($order['order_sn'], OS_CONFIRMED, SS_UNSHIPPED, PS_UNPAYED, null);
-
-            /* 如果原来状态不是“未确认”，且使用库存，且下订单时减库存，则减少库存 */
-            if ($order['order_status'] != OS_UNCONFIRMED && $_CFG['use_storage'] == '1' && $_CFG['stock_dec_time'] == SDT_PLACE)
+            /* 标记订单为“收货确认”，如果是货到付款，同时修改订单为已付款 */
+            $arr = array('shipping_status' => SS_RECEIVED);
+            $payment = payment_info($order['pay_id']);
+            if ($payment['is_cod'])
             {
-                change_order_goods_storage($order['order_id'], true, SDT_PLACE);
+                $arr['pay_status'] = PS_PAYED;
+                $order['pay_status'] = PS_PAYED;
             }
+            update_order($order['order_id'], $arr);
+            /* 记录log */
+            order_action($order['order_sn'], $order['order_status'], SS_RECEIVED, $order['pay_status'], $action_note);
             $result['result'] = 'success';
         }
     }
