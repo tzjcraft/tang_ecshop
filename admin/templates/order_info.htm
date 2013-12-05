@@ -284,11 +284,15 @@
         <input name="pay" type="submit" value="{$lang.op_pay}" class="button" />
         {/if} {if $operable_list.unpay}
         <input name="unpay" type="submit" class="button" value="{$lang.op_unpay}" />
-        {/if} {if $operable_list.prepare}
-        <input name="prepare" type="submit" value="{$lang.op_prepare}" class="button" />
-        {/if} {if $operable_list.split}
-        <input name="ship" type="submit" value="{$lang.op_split}" class="button" />
-        {/if} {if $operable_list.unship}
+        {/if} 
+        <!--改为一键确认收货-->
+        {* if $operable_list.prepare *}
+        <!--<input name="prepare" type="submit" value="{$lang.op_prepare}" class="button" />-->
+        {* /if *} {* if $operable_list.split *}
+        <!--<input name="ship" type="submit" value="{$lang.op_split}" class="button" />-->
+        {* /if *}
+
+        {if $operable_list.unship}
         <input name="unship" type="submit" value="{$lang.op_unship}" class="button" />
         {/if} {if $operable_list.receive}
         <input name="receive" type="submit" value="{$lang.op_receive}" class="button" />
