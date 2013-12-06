@@ -2535,7 +2535,7 @@ elseif ($_REQUEST['act'] == 'operate')
         $invoice_no = 'DEFAULT_SHIPPING_NUMBER';
         $order_id = intval(trim($order_id));
         $action_note = trim($action_note);
-        quick_shipping($order_id, $_SESSION[admin_id]);
+        quick_shipping($order_id, array('user_id' => $_SESSION['admin_id'], 'action_list' => $_SESSION['action_list']));
 
         /* 操作成功 */
         $links[] = array('text' => $_LANG['order_info'], 'href' => 'order.php?act=info&order_id=' . $order_id);
@@ -4494,7 +4494,7 @@ elseif ($_REQUEST['act'] == 'order_confirm')
         else
         {
             //一键确认收货
-            $result = quick_shipping($order['order_id'], $user['user_id']);
+            $result = quick_shipping($order['order_id'], $user);
         }
     }
     else
@@ -6673,8 +6673,9 @@ function operable_list_by_user($order, $user)
     return $list;
 }
 
-function quick_shipping($order_id, $admin_id)
+function quick_shipping($order_id, $admin)
 {
+    $admin_id = $admin['user_id'];
     /* 查询：根据订单id查询订单信息 */
     if (!empty($order_id))
     {
@@ -6687,11 +6688,11 @@ function quick_shipping($order_id, $admin_id)
     /* 查询：根据订单是否完成 检查权限 */
     if (order_finished($order))
     {
-        admin_priv('order_view_finished');
+        admin_priv_api('order_view_finished', $admin);
     }
     else
     {
-        admin_priv('order_view');
+        admin_priv_api('order_view', $admin);
     }
 
     /* 查询：如果管理员属于某个办事处，检查该订单是否也属于这个办事处 */
@@ -7269,7 +7270,7 @@ function quick_shipping($order_id, $admin_id)
 
     /* 确认收货 */
     $order = order_info($order_id);
-    $operable_list = operable_list($order);
+    $operable_list = operable_list_by_user($order, $admin);
     if (isset($operable_list['receive']))
     {
         /* 标记订单为“收货确认”，如果是货到付款，同时修改订单为已付款 */
@@ -7289,6 +7290,40 @@ function quick_shipping($order_id, $admin_id)
     clear_cache_files();
     $result['result'] = 'success';
     return $result;
+}
+
+/**
+ * 判断管理员对某一个操作是否有权限。
+ *
+ * 根据当前对应的action_code，然后再和用户session里面的action_list做匹配，以此来决定是否可以继续执行。
+ * @param     string    $priv_str    操作对应的priv_str
+ * @param     string    $msg_type       返回的类型
+ * @return true/false
+ */
+function admin_priv_api($priv_str, $admin, $msg_type = '', $msg_output = true)
+{
+    global $_LANG;
+
+    $action_list = $admin['action_list'];
+    if ($action_list == 'all')
+    {
+        return true;
+    }
+
+    if (strpos(',' . $action_list . ',', ',' . $priv_str . ',') === false)
+    {
+        $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+        if ($msg_output)
+        {
+            sys_msg($_LANG['priv_error'], 0, $link);
+        }
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+
 }
 
 ?>
