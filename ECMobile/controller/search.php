@@ -55,7 +55,7 @@ if ($sort_by == 'is_default')
 {
     $sort = 'add_time DESC, goods_id';
 }
-elseif ($sort_by == 'is_default')
+elseif ($sort_by == 'is_appraisal')
 {
     $sort = 'comments_num';
 }
@@ -328,7 +328,7 @@ $_REQUEST['keywords']   = !empty($_REQUEST['keywords'])   ? htmlspecialchars(tri
   /* 查询商品 */
   $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.is_new, g.is_best, g.is_hot, g.shop_price AS org_price, ".
               "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
-              "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_thumb, g.goods_img, g.original_img, g.goods_brief, g.goods_type, count(c.comment_id) AS comments_num " .
+              "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_thumb, g.goods_img, g.original_img, g.goods_brief, g.goods_type, g.add_time, count(c.comment_id) AS comments_num " .
         "FROM " .$ecs->table('goods'). " AS g ".
           "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp ".
                   "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
@@ -339,10 +339,10 @@ $_REQUEST['keywords']   = !empty($_REQUEST['keywords'])   ? htmlspecialchars(tri
         "ORDER BY $sort $order";
 $res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
 
-  $arr = array();
+$arr = array();
   while ($row = $db->FetchRow($res))
   {
-      if ($row['promote_price'] > 0)
+    if ($row['promote_price'] > 0)
       {
           $promote_price = bargain_price($row['promote_price'], $row['promote_start_date'], $row['promote_end_date']);
       }
@@ -392,7 +392,7 @@ $res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
       $arr[$row['goods_id']]['url']           = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
   }
 
-  $smarty->assign('goods_list', $arr);
+$smarty->assign('goods_list', $arr);
   $smarty->assign('category',   $category);
   $smarty->assign('keywords',   htmlspecialchars(stripslashes($_REQUEST['keywords'])));
   $smarty->assign('search_keywords',   stripslashes(htmlspecialchars_decode($_REQUEST['keywords'])));
