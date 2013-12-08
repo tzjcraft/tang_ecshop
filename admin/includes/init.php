@@ -245,7 +245,7 @@ if(isset($_GET['ent_id']) && isset($_GET['ent_ac']) &&  isset($_GET['ent_sign'])
         ecs_header("Location: ./index.php\n");
     }
 }
-$api_action = array('login_verify', 'order_confirm');
+$api_action = array('login_verify', 'order_confirm', 'order_information');
 /* 验证管理员身份 */
 if (in_array($_REQUEST['act'], $api_action) == false && (!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
         $_REQUEST['act'] != 'login' && $_REQUEST['act'] != 'signin' &&

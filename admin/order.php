@@ -4503,6 +4503,37 @@ elseif ($_REQUEST['act'] == 'order_confirm')
     }
     echo json_encode($result);
 }
+elseif ($_REQUEST['act'] == 'order_information')
+{
+    header('Content-Type: text/html; charset=utf-8');
+    include_once(ROOT_PATH . 'includes/lib_order.php');
+    $order_sn = trim($_REQUEST['order_number']);
+    $order = order_info(null, $order_sn);
+
+    $username = isset($_REQUEST['username']) ? trim($_REQUEST['username']) : '';
+    $password = isset($_REQUEST['password']) ? trim($_REQUEST['password']) : '';
+    $user = is_admin_user($username, $password);
+    $result = array();
+    if (!$user || !$order)
+    {
+        $result['result'] = 'failed';
+    }
+    else
+    {
+        $result['result'] = 'success';
+        $orderDeatil['order_number'] = $order['order_sn'];
+        $orderDeatil['receiver_name'] = $order['consignee'];
+        $orderDeatil['receiver_phone'] = $order['mobile'];
+        $goods_list = get_goods_list_by_order($order['order_id']);
+        foreach ($goods_list as $key => $good_info)
+        {
+            $orderDeatil['good_list'][$key]['goods_name'] = urlencode($good_info['goods_name']);
+            $orderDeatil['good_list'][$key]['goods_count'] = $good_info['goods_number'];
+        }
+        $result['order_detail'] = $orderDeatil;
+    }
+    echo urldecode(json_encode($result));
+}
 
 /**
  * 取得状态列表
@@ -7324,6 +7355,61 @@ function admin_priv_api($priv_str, $admin, $msg_type = '', $msg_output = true)
         return true;
     }
 
+}
+
+/**
+ * 获取订单货物信息
+ * @param type $order_id
+ * @return array
+ */
+function get_goods_list_by_order($order_id)
+{
+    $order = order_info($order_id);
+    /* 取得订单商品及货品 */
+    $goods_list = array();
+    if (!$order)
+        return $goods_list;
+    $sql = "SELECT o.*, IF(o.product_id > 0, p.product_number, g.goods_number) AS storage, o.goods_attr, g.suppliers_id, IFNULL(b.brand_name, '') AS brand_name, p.product_sn
+            FROM " . $GLOBALS['ecs']->table('order_goods') . " AS o
+                LEFT JOIN " . $GLOBALS['ecs']->table('products') . " AS p
+                    ON p.product_id = o.product_id
+                LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g
+                    ON o.goods_id = g.goods_id
+                LEFT JOIN " . $GLOBALS['ecs']->table('brand') . " AS b
+                    ON g.brand_id = b.brand_id
+            WHERE o.order_id = '$order[order_id]'";
+    $res = $GLOBALS['db']->query($sql);
+    while ($row = $GLOBALS['db']->fetchRow($res))
+    {
+        /* 虚拟商品支持 */
+        if ($row['is_real'] == 0)
+        {
+            /* 取得语言项 */
+            $filename = ROOT_PATH . 'plugins/' . $row['extension_code'] . '/languages/common_' . $_CFG['lang'] . '.php';
+            if (file_exists($filename))
+            {
+                include_once($filename);
+                if (!empty($GLOBALS['_LANG'][$row['extension_code'] . '_link']))
+                {
+                    $row['goods_name'] = $row['goods_name'] . sprintf($GLOBALS['_LANG'][$row['extension_code'] . '_link'],
+                                    $row['goods_id'], $order['order_sn']);
+                }
+            }
+        }
+
+        $row['formated_subtotal'] = price_format($row['goods_price'] * $row['goods_number']);
+        $row['formated_goods_price'] = price_format($row['goods_price']);
+
+        if ($row['extension_code'] == 'package_buy')
+        {
+            $row['storage'] = '';
+            $row['brand_name'] = '';
+            $row['package_goods_list'] = get_package_goods($row['goods_id']);
+        }
+
+        $goods_list[] = $row;
+    }
+    return $goods_list;
 }
 
 ?>
