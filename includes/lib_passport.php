@@ -50,16 +50,22 @@ function register($username, $password, $email, $other = array())
     }
 
     /* 检查email */
-    if (empty($email))
+    //Email改为选填
+    /* if (empty($email))
+      {
+      $GLOBALS['err']->add($GLOBALS['_LANG']['email_empty']);
+      }
+      else
+      {
+      if (!is_email($email))
+      {
+      $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['email_invalid'], htmlspecialchars($email)));
+      }
+      } */
+    //如果有Email， 则验证邮箱格式
+    if ($email && !is_email($email))
     {
-        $GLOBALS['err']->add($GLOBALS['_LANG']['email_empty']);
-    }
-    else
-    {
-        if (!is_email($email))
-        {
-            $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['email_invalid'], htmlspecialchars($email)));
-        }
+        $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['email_invalid'], htmlspecialchars($email)));
     }
 
     if ($GLOBALS['err']->error_no > 0)
