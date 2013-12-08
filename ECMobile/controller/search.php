@@ -51,13 +51,19 @@ $order = 'DESC';
 $sort = 'goods_id';
 $intro = '';
 // print_r($price_range);exit;
-if ($sort_by == 'is_hot') {
-    $sort = 'is_hot DESC, goods_id';
-    $order = 'DESC';
-    //$intro = 'hot';
-} elseif ($sort_by == 'price_desc') {
+if ($sort_by == 'is_default')
+{
+    $sort = 'add_time DESC, goods_id';
+}
+elseif ($sort_by == 'is_default')
+{
+    $sort = 'comments_num';
+}
+elseif ($sort_by == 'price_desc')
+{
     $sort = 'shop_price';
-} elseif ($sort_by == 'price_asc') {
+}
+elseif ($sort_by == 'price_asc') {
     $sort = 'shop_price';
     $order = 'ASC';
 }
@@ -322,14 +328,16 @@ $_REQUEST['keywords']   = !empty($_REQUEST['keywords'])   ? htmlspecialchars(tri
   /* 查询商品 */
   $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.is_new, g.is_best, g.is_hot, g.shop_price AS org_price, ".
               "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
-              "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_thumb, g.goods_img, g.original_img, g.goods_brief, g.goods_type ".
-          "FROM " .$ecs->table('goods'). " AS g ".
+              "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_thumb, g.goods_img, g.original_img, g.goods_brief, g.goods_type, count(c.comment_id) AS comments_num " .
+        "FROM " .$ecs->table('goods'). " AS g ".
           "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp ".
-                  "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' ".
-          "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in ".
-              "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) ".$tag_where." ) " .
-          "ORDER BY $sort $order";
-  $res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
+                  "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
+        "LEFT JOIN " . $GLOBALS['ecs']->table('comment') . " AS c ON g.goods_id = c.id_value AND c.comment_type = 0 " .
+        "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in ".
+              "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " ) " .
+        "GROUP BY g.goods_id " .
+        "ORDER BY $sort $order";
+$res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
 
   $arr = array();
   while ($row = $db->FetchRow($res))
@@ -399,7 +407,7 @@ $_REQUEST['keywords']   = !empty($_REQUEST['keywords'])   ? htmlspecialchars(tri
   {
       $url_format .= "&amp;intro=" . $intromode;
   }
-  if (isset($_REQUEST['pickout']))
+if (isset($_REQUEST['pickout']))
   {
       $url_format .= '&amp;pickout=1';
   }
