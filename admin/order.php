@@ -4514,11 +4514,7 @@ elseif ($_REQUEST['act'] == 'order_information')
     $password = isset($_REQUEST['password']) ? trim($_REQUEST['password']) : '';
     $user = is_admin_user($username, $password);
     $result = array();
-    if (!$user || !$order)
-    {
-        $result['result'] = 'failed';
-    }
-    else
+    if ($user && $order && $order['pay_status'] == PS_PAYED && $order['shipping_status'] != SS_RECEIVED)
     {
         $result['result'] = 'success';
         $orderDeatil['order_number'] = $order['order_sn'];
@@ -4531,6 +4527,10 @@ elseif ($_REQUEST['act'] == 'order_information')
             $orderDeatil['good_list'][$key]['goods_count'] = $good_info['goods_number'];
         }
         $result['order_detail'] = $orderDeatil;
+    }
+    else
+    {
+        $result['result'] = 'failed';
     }
     echo urldecode(json_encode($result));
 }
