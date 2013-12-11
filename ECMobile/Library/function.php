@@ -38,9 +38,11 @@ function GZ_user_info($user_id)
 	$await_ship = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('await_ship'));
 	$shipped = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('shipped'));
 	$finished = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('finished'));
-	
-	// include_once(ROOT_PATH .'includes/lib_clips.php');
-	// $rank = get_rank_info();
+	$bouns = get_user_bouns_list($user_id);
+
+     include_once(ROOT_PATH . 'includes/lib_clips.php');
+    $surplus_amount = get_user_surplus($user_id);
+    // $rank = get_rank_info();
 	// print_r($rank);exit;
 
 	/* 取得用户等级 */
@@ -74,6 +76,8 @@ function GZ_user_info($user_id)
         'rank_level' => $level,
         'collection_num' => $collection_num,
         'integral' => $user_info['pay_points'],
+        'redpocket' => count($bouns),
+        'balance' => price_format($surplus_amount, false),
         'email' => $user_info['email'],
         "order_num" => array(
             'await_pay' => $await_pay,
@@ -406,3 +410,51 @@ function API_DATA($type, $readData)
     }
     return $outData;
 }
+
+/**
+ *
+ * @access  public
+ * @param   int         $user_id         用户ID
+ * @return  array       $arr             红保列表
+ */
+function get_user_bouns_list($user_id)
+{
+    $sql = "SELECT u.bonus_sn, u.order_id, b.type_name, b.type_money, b.min_goods_amount, b.use_start_date, b.use_end_date " .
+            " FROM " . $GLOBALS['ecs']->table('user_bonus') . " AS u ," .
+            $GLOBALS['ecs']->table('bonus_type') . " AS b" .
+            " WHERE u.bonus_type_id = b.type_id AND u.user_id = '" . $user_id . "'";
+    $res = $GLOBALS['db']->getAll($sql);
+
+    $arr = array();
+    $day = getdate();
+    $cur_date = local_mktime(23, 59, 59, $day['mon'], $day['mday'], $day['year']);
+    foreach ($res as $row)
+    {
+        /* 先判断是否被使用，然后判断是否开始或过期 */
+        if (empty($row['order_id']))
+        {
+            /* 没有被使用 */
+            if ($row['use_start_date'] > $cur_date)
+            {
+                $row['status'] = 'not_start';
+            }
+            else if ($row['use_end_date'] < $cur_date)
+            {
+                $row['status'] = 'overdue';
+            }
+            else
+            {
+                $row['status'] = 'not_use';
+            }
+        }
+        else
+        {
+            $row['status'] = 'had_use';
+        }
+        if ($row['status'] != 'not_use')
+            continue;
+        $arr[] = $row;
+    }
+    return $arr;
+}
+
