@@ -53,8 +53,7 @@
   <!-- {/if} -->
   <tr>
     <td bgcolor="#ffffff">{$lang.phone}:</td>
-    <td bgcolor="#ffffff"><input name="tel" type="text" class="inputBg"  id="tel_{$sn}" value="{$consignee.tel|escape}" />
-    {$lang.require_field}</td>
+    <td bgcolor="#ffffff"><input name="tel" type="text" class="inputBg"  id="tel_{$sn}" value="{$consignee.tel|escape}" /></td>
     <td bgcolor="#ffffff">{$lang.backup_phone}:</td>
     <td bgcolor="#ffffff"><input name="mobile" type="text" class="inputBg"  id="mobile_{$sn}" value="{$consignee.mobile|escape}" />
 {$lang.require_field}</td>

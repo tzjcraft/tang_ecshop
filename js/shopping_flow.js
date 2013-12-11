@@ -548,20 +548,23 @@ function checkConsignee(frm)
 
   if (frm.elements['country'] && frm.elements['country'].value == 0)
   {
-    msg.push(country_not_null);
+//    msg.push(country_not_null);
+    msg.push(metro_not_null);
     err = true;
   }
 
   if (frm.elements['province'] && frm.elements['province'].value == 0 && frm.elements['province'].length > 1)
   {
     err = true;
-    msg.push(province_not_null);
+//    msg.push(province_not_null);
+    msg.push(station_not_null);
   }
 
   if (frm.elements['city'] && frm.elements['city'].value == 0 && frm.elements['city'].length > 1)
   {
     err = true;
-    msg.push(city_not_null);
+//    msg.push(city_not_null);
+    msg.push(exit_not_null);
   }
 
   if (frm.elements['district'] && frm.elements['district'].length > 1)
@@ -597,7 +600,7 @@ function checkConsignee(frm)
     msg.push(zip_not_num);
   }
 
-  if (Utils.isEmpty(frm.elements['tel'].value))
+    /*if (Utils.isEmpty(frm.elements['tel'].value))
   {
     err = true;
     msg.push(tele_not_null);
@@ -609,6 +612,12 @@ function checkConsignee(frm)
       err = true;
       msg.push(tele_invaild);
     }
+    }*/
+
+    if (frm.elements['tel'] && frm.elements['tel'].value.length > 0 && !Utils.isTel(frm.elements['tel'].value))
+    {
+        err = true;
+        msg.push(tele_invaild);
     }
 
     if (Utils.isEmpty(frm.elements['mobile'].value))
