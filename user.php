@@ -956,7 +956,8 @@ elseif ($action == 'address_list')
     $smarty->assign('district_list',    $district_list);
     $smarty->assign('currency_format',  $_CFG['currency_format']);
     $smarty->assign('integral_scale',   $_CFG['integral_scale']);
-    $smarty->assign('name_of_region',   array($_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']));
+    $smarty->assign('name_of_region',
+            array($_CFG['name_of_region_5'], $_CFG['name_of_region_6'], $_CFG['name_of_region_7'], $_CFG['name_of_region_4']));
 
     $smarty->display('user_transaction.dwt');
 }

@@ -114,6 +114,9 @@ $_LANG['flow_js']['goodsattr_style'] = 1;
 $_LANG['flow_js']['tele_invaild'] = '電話號碼不有效的號碼';
 $_LANG['flow_js']['zip_not_num'] = '郵政編碼只能填寫數字';
 $_LANG['flow_js']['mobile_invaild'] = '手機號碼不是合法號碼';
+$_LANG['flow_js']['metro_not_null'] = '請您選擇收貨人所在地鐵線路！';
+$_LANG['flow_js']['station_not_null'] = '請您選擇收貨人所在站名！';
+$_LANG['flow_js']['exit_not_null'] = '請您選擇收貨人所在出口！';
 
 $_LANG['new_consignee_address'] = '新收貨地址';
 $_LANG['consignee_address'] = '收貨地址';

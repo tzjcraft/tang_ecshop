@@ -341,7 +341,8 @@ elseif ($_REQUEST['step'] == 'consignee')
                 $consignee_list[] = array('country' => $_CFG['shop_country']);
             }
         }
-        $smarty->assign('name_of_region',   array($_CFG['name_of_region_1'], $_CFG['name_of_region_2'], $_CFG['name_of_region_3'], $_CFG['name_of_region_4']));
+        $smarty->assign('name_of_region',
+                array($_CFG['name_of_region_5'], $_CFG['name_of_region_6'], $_CFG['name_of_region_7'], $_CFG['name_of_region_4']));
         $smarty->assign('consignee_list', $consignee_list);
 
         /* 取得每个收货地址的省市区列表 */

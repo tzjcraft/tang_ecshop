@@ -116,6 +116,9 @@ $_LANG['flow_js']['goodsattr_style'] = 1;
 $_LANG['flow_js']['tele_invaild'] = 'Please enter valid phone No.';
 $_LANG['flow_js']['zip_not_num'] = 'Zip code should be numbers';
 $_LANG['flow_js']['mobile_invaild'] = 'Mobile No. is invalid';
+$_LANG['flow_js']['metro_not_null'] = 'Please select a metro line of consignee!';
+$_LANG['flow_js']['station_not_null'] = 'Please select a station of consignee!';
+$_LANG['flow_js']['exit_not_null'] = 'Please select an exit of consignee!';
 
 $_LANG['new_consignee_address'] = 'New consignee address';
 $_LANG['consignee_address'] = 'Address';
