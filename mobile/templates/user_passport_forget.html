@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>ECShop_mobile</title>
+    </head>
+
+    <body>
+
+        <p align='left'>
+            <!--{if $action eq 'qpassword_name'} -->
+            密码问题找回密码<br/>
+            --------------<br/>
+            <form action="user.php?act=get_passwd_question" method="post">
+                <br />
+                <strong>请输入您注册的用户名<br />以取得您的密码提示问题</strong>
+                <br />
+                用户名: <input name="user_name" type="text" size="20" />
+                <br />
+                <input type="submit" name="submit" value="提交" style="border:none;" />
+                <br />
+                <input name="button" type="button" onclick="history.back()" value="返回上一页" style="border:none;" />
+                <br />
+            </form>
+            <br/>
+            <!--{/if}-->
+            <!--{if $action eq 'get_passwd_question'} -->
+            {$message}<br />
+            <strong>请根据您注册时设置的密码问题<br />输入设置的答案</strong>
+            <br />
+            <form method="post" action="user.php?act=check_answer">
+                密码提示问题: {$passwd_question}
+                <input type="hidden" value="{$passwd_question}" name="passwd_question" />
+                <br />
+            密码问题答案: <input type="text" size="20" name="passwd_answer">
+                <br />
+                    <input type="submit" style="border:none;" value="提 交" name="submit">
+                        <input type="button" style="border:none;" value="返回上一页" onclick="history.back()" name="button">
+                            </form>
+            <!--{/if}-->
+            <!-- {if $action eq 'reset_password'} -->
+            {$message}<br />
+            <!--{if $status}-->
+            <a href="user.php">点击登录</a>
+            <!--{else}-->
+                <form name="getPassword2" method="post" action="user.php?act=act_edit_password">
+                    新密码: <input type="password" size="20" name="new_password">
+                        <br />
+                        确认密码: <input type="password" size="20" name="confirm_password">
+                            <input type="hidden" value="6" name="uid">
+                                <input type="hidden" value="" name="code">
+                                    <br />
+                                    <input type="submit" value="　确 定　" name="submit">
+                                        </form>
+                                        <!--{/if}-->
+            <!--{/if}-->
+            {$footer}
+        </p>
+    </body>
+</html>

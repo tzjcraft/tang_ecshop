@@ -237,7 +237,142 @@ elseif ($act == 'act_register')
             ecs_header("Location: $Loaction\n");
         }
 }
+/* 密码找回-->输入用户名界面 */
+elseif ($act == 'qpassword_name')
+{
+    //显示输入要找回密码的账号表单
+    $smarty->assign('action', $act);
+    $smarty->display('user_passport_forget.html');
+}
+/* 密码找回-->根据注册用户名取得密码提示问题界面 */
+elseif ($act == 'get_passwd_question')
+{
+    if (empty($_POST['user_name']))
+    {
+        echo '您没有设置密码提示问题，无法通过这种方式找回密码';
+        echo '<br />';
+        echo '<a href="user.php">返回登录页面</a>';
+        exit;
+    }
+    else
+    {
+        $user_name = trim($_POST['user_name']);
+    }
 
+    //取出会员密码问题和答案
+    $sql = 'SELECT user_id, user_name, passwd_question, passwd_answer FROM ' . $ecs->table('users') . " WHERE user_name = '" . $user_name . "'";
+    $user_question_arr = $db->getRow($sql);
+
+    //如果没有设置密码问题，给出错误提示
+    if (empty($user_question_arr['passwd_answer']))
+    {
+        echo '您没有设置密码提示问题，无法通过这种方式找回密码';
+        echo '<br />';
+        echo '<a href="user.php">返回登录页面</a>';
+        exit;
+    }
+
+    $_SESSION['temp_user'] = $user_question_arr['user_id'];  //设置临时用户，不具有有效身份
+    $_SESSION['temp_user_name'] = $user_question_arr['user_name'];  //设置临时用户，不具有有效身份
+    $_SESSION['passwd_answer'] = $user_question_arr['passwd_answer'];   //存储密码问题答案，减少一次数据库访问
+    $_SESSION['passwd_question'] = $_LANG['passwd_questions'][$user_question_arr['passwd_question']];
+    $captcha = intval($_CFG['captcha']);
+    if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0)
+    {
+        $GLOBALS['smarty']->assign('enabled_captcha', 1);
+        $GLOBALS['smarty']->assign('rand', mt_rand());
+    }
+    $smarty->assign('action', $act);
+    $smarty->assign('passwd_question', $_LANG['passwd_questions'][$user_question_arr['passwd_question']]);
+    $smarty->display('user_passport_forget.html');
+}
+/* 密码找回-->根据提交的密码答案进行相应处理 */
+elseif ($act == 'check_answer')
+{
+    //验证码
+//    $captcha = intval($_CFG['captcha']);
+//    if (($captcha & CAPTCHA_LOGIN) && (!($captcha & CAPTCHA_LOGIN_FAIL) || (($captcha & CAPTCHA_LOGIN_FAIL) && $_SESSION['login_fail'] > 2)) && gd_version() > 0)
+//    {
+//        if (empty($_POST['captcha']))
+//        {
+//            show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
+//        }
+//
+//        /* 检查验证码 */
+//        include_once(ROOT_PATH . '/includes/cls_captcha.php');
+//
+//        $validator = new captcha();
+//        $validator->session_word = 'captcha_login';
+//        if (!$validator->check_word($_POST['captcha']))
+//        {
+//            show_message($_LANG['invalid_captcha'], $_LANG['back_retry_answer'], 'user.php?act=qpassword_name', 'error');
+//        }
+//    }
+
+    if (empty($_POST['passwd_answer']) || $_POST['passwd_answer'] != $_SESSION['passwd_answer'])
+    {
+        $message = '您输入的密码答案是错误的';
+        $smarty->assign('action', 'get_passwd_question');
+        $smarty->assign('passwd_question', $_SESSION['passwd_question']);
+        $smarty->display('user_passport_forget.html');
+    }
+    else
+    {
+        $_SESSION['user_id'] = $_SESSION['temp_user'];
+        $_SESSION['user_name'] = $_SESSION['temp_user_name'];
+        unset($_SESSION['temp_user']);
+        unset($_SESSION['temp_user_name']);
+        $smarty->assign('uid', $_SESSION['user_id']);
+        $smarty->assign('action', 'reset_password');
+        $smarty->display('user_passport_forget.html');
+    }
+}
+/* 修改会员密码 */
+elseif ($act == 'act_edit_password')
+{
+    include_once(ROOT_PATH . '/includes/lib_passport.php');
+    $status = false;
+    $old_password = isset($_POST['old_password']) ? trim($_POST['old_password']) : null;
+    $new_password = isset($_POST['new_password']) ? trim($_POST['new_password']) : '';
+    $user_id = isset($_POST['uid']) ? intval($_POST['uid']) : $user_id;
+    $code = isset($_POST['code']) ? trim($_POST['code']) : '';
+
+    if (strlen($new_password) < 6)
+    {
+        $message = '登录密码不能少于 6 个字符。';
+    }
+    else
+    {
+
+        $user_info = $user->get_profile_by_id($user_id); //论坛记录
+        if (($user_info && (!empty($code) && md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']) == $code)) || ($_SESSION['user_id'] > 0 && $_SESSION['user_id'] == $user_id && $user->check_user($_SESSION['user_name'],
+                        $old_password)))
+        {
+
+            if ($user->edit_user(array('username' => (empty($code) ? $_SESSION['user_name'] : $user_info['user_name']), 'old_password' => $old_password, 'password' => $new_password),
+                            empty($code) ? 0 : 1))
+            {
+                $sql = "UPDATE " . $ecs->table('users') . "SET `ec_salt`='0' WHERE user_id= '" . $user_id . "'";
+                $db->query($sql);
+                $user->logout();
+                $message = '您的新密码已设置成功！';
+                $status = true;
+            }
+            else
+            {
+                $message = '您输入的原密码不正确！';
+            }
+        }
+        else
+        {
+            $message = '您输入的原密码不正确！';
+        }
+    }
+    $smarty->assign('action', 'reset_password');
+    $smarty->assign('message', $message);
+    $smarty->assign('status', $status);
+    $smarty->display('user_passport_forget.html');
+}
 /* 用户中心 */
 else
 {
