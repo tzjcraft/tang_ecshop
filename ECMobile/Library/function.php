@@ -38,9 +38,9 @@ function GZ_user_info($user_id)
 	$await_ship = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('await_ship'));
 	$shipped = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('shipped'));
 	$finished = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('finished'));
-	$bouns = get_user_bouns_list($user_id);
+	$bouns = get_user_available_bouns_list($user_id);
 
-     include_once(ROOT_PATH . 'includes/lib_clips.php');
+    include_once(ROOT_PATH . 'includes/lib_clips.php');
     $surplus_amount = get_user_surplus($user_id);
     // $rank = get_rank_info();
 	// print_r($rank);exit;
@@ -417,7 +417,7 @@ function API_DATA($type, $readData)
  * @param   int         $user_id         用户ID
  * @return  array       $arr             红保列表
  */
-function get_user_bouns_list($user_id)
+function get_user_available_bouns_list($user_id)
 {
     $sql = "SELECT u.bonus_sn, u.order_id, b.type_name, b.type_money, b.min_goods_amount, b.use_start_date, b.use_end_date " .
             " FROM " . $GLOBALS['ecs']->table('user_bonus') . " AS u ," .
