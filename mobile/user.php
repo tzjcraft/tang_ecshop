@@ -373,6 +373,78 @@ elseif ($act == 'act_edit_password')
     $smarty->assign('status', $status);
     $smarty->display('user_passport_forget.html');
 }
+/* 密码找回-->修改密码界面 */
+elseif ($act == 'get_password')
+{
+    include_once(ROOT_PATH . '/includes/lib_passport.php');
+
+    if (isset($_GET['code']) && isset($_GET['uid'])) //从邮件处获得的act
+    {
+        $code = trim($_GET['code']);
+        $uid = intval($_GET['uid']);
+
+        /* 判断链接的合法性 */
+        $user_info = $user->get_profile_by_id($uid);
+        if (empty($user_info) || ($user_info && md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']) != $code))
+        {
+//            show_message($_LANG['parm_error'], $_LANG['back_home_lnk'], './', 'info');
+            $message = '参数错误，请返回！';
+        }
+
+        $smarty->assign('uid', $uid);
+        $smarty->assign('code', $code);
+        $smarty->assign('action', 'reset_password');
+        $smarty->display('user_passport_forget.html');
+    }
+    else
+    {
+        //显示用户名和email表单
+        $smarty->assign('action', 'get_password');
+        $smarty->display('user_passport_forget.html');
+    }
+}
+/* 发送密码修改确认邮件 */
+elseif ($act == 'send_pwd_email')
+{
+    $status = false;
+    include_once(ROOT_PATH . '/includes/lib_passport.php');
+    $message = null;
+    /* 初始化会员用户名和邮件地址 */
+    $user_name = !empty($_POST['user_name']) ? trim($_POST['user_name']) : '';
+    $email = !empty($_POST['email']) ? trim($_POST['email']) : '';
+
+    //用户名和邮件地址是否匹配
+    $user_info = $user->get_user_info($user_name);
+
+    if ($user_info && $user_info['email'] == $email)
+    {
+        //生成code
+        //$code = md5($user_info[0] . $user_info[1]);
+
+        $code = md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']);
+        //发送邮件的函数
+        if (send_pwd_email($user_info['user_id'], $user_name, $email, $code))
+        {
+//            show_message($_LANG['send_success'] . $email, $_LANG['back_home_lnk'], './', 'info');
+            $message = '重置密码的邮件已经发到您的邮箱：' . $email;
+            $status = true;
+        }
+        else
+        {
+            //发送邮件出错
+            $message = '发送邮件出错，请与管理员联系！';
+        }
+    }
+    else
+    {
+        //用户名与邮件地址不匹配
+        $message = '您填写的用户名与电子邮件地址不匹配，请重新输入！';
+    }
+    $smarty->assign('action', 'get_password');
+    $smarty->assign('status', $status);
+    $smarty->assign('message', $message);
+    $smarty->display('user_passport_forget.html');
+}
 /* 用户中心 */
 else
 {
