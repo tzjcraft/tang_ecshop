@@ -109,15 +109,17 @@ class sms
      * @param   string  $msg            发送的消息内容
      */
  //    function send($phones,$msg,$send_date = '', $send_num = 1,$sms_type='',$version='1.0')
-    function send($phones, $msg, $pszMobis = '', $pszMsg = '', $iMobiCount = '', $pszSubPort = '')
+    function send($phones, $msg, $pszSubPort = '')
     {
-       
+       $result = array();
         /* 检查发送信息的合法性 */
-        $contents=$this->get_contents($phones, $msg);  
+        $contents = $this->get_contents($phones, $msg);
         if(!$contents)
         {
-            $this->errors['server_errors']['error_no'] = 3;//发送的信息有误
-            return false;
+            $this->errors['server_errors']['error_no'] = 3; //发送的信息有误
+            $result['status']['succeed'] = 0;
+            $result['data'] = $msg;
+            return $result;
         }
         
         /* $login_info = $this->getSmsInfo();
@@ -146,7 +148,8 @@ class sms
         }
         $type = 'MongateCsSpSendSmsNew'; //发送短信的方法
         $sms_url .= $type;
-        $curlPost = 'userId=' . $this->userId . '&password=' . $this->password . '&pszMobis=' . $pszMobis . '&pszMsg=' . $pszMsg . '&iMobiCount=' . $iMobiCount . '&pszSubPort=' . $pszSubPort;
+        $iMobiCount = $phones ? count(explode(',', $phones)) : 0;
+        $curlPost = 'userId=' . $this->userId . '&password=' . $this->password . '&pszMobis=' . $phones . '&pszMsg=' . $msg . '&iMobiCount=' . $iMobiCount . '&pszSubPort=' . $pszSubPort;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $sms_url);
@@ -154,17 +157,26 @@ class sms
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $curlPost);
-        $result = curl_exec($ch);
+        $data = curl_exec($ch);
         curl_close($ch);
-        $length = strlen(trim($result, '-'));
+        $doc = new DOMDocument();
+        $doc->loadXML($data);
+        $xml = $doc->documentElement;
+        $errorCode = $xml->nodeName == 'string' ? $xml->nodeValue : 0;
+        $length = strlen(trim($errorCode, '-'));
         if ($length > 10 && $length < 25)
         {
-            return true;
+            $result['status']['succeed'] = 1;
+            $result['data'] = $msg;
         }
         else
         {
-            return false;
+            $result['status']['succeed'] = 0;
+            $result['status']['error_code'] = $errorCode;
+            $result['status']['error_desc'] = $this->getErrorByCode($errorCode);
+            $result['data'] = $msg;
         }
+        return $result;
         /* $send_str['contents']= $this->json->encode($contents);
           $send_str['certi_app']='sms.send';
           $send_str['entId']=$GLOBALS['_CFG']['ent_id'];
@@ -412,7 +424,49 @@ class sms
         '='=>'_3_',
         );
     }
-    
+
+    function getErrorByCode($code)
+    {
+        if (!$code)
+            return null;
+        $errors = array(
+            '-999' => '服务器内部错误',
+            '-10001' => '用户登陆不成功',
+            '-10002' => '提交格式不正确',
+            '-10003' => '用户余额不足',
+            '-10004' => '手机号码不正确',
+            '-10005' => '计费用户帐号错误',
+            '-10006' => '计费用户密码错',
+            '-10007' => '账号已经被停用',
+            '-10008' => '账号类型不支持该功能',
+            '-10009' => '其它错误',
+            '-10010' => '企业代码不正确',
+            '-10011' => '信息内容超长',
+            '-10012' => '不能发送联通号码',
+            '-10013' => '操作员权限不够',
+            '-10014' => '费率代码不正确',
+            '-10015' => '服务器繁忙',
+            '-10016' => '企业权限不够',
+            '-10017' => '此时间段不允许发送',
+            '-10018' => '经销商用户名或密码错',
+            '-10019' => '手机列表或规则错误',
+            '-10021' => '没有开停户权限',
+            '-10022' => '没有转换用户类型的权限',
+            '-10023' => '没有修改用户所属经销商的权限',
+            '-10024' => '经销商用户名或密码错',
+            '-10025' => '操作员登陆名或密码错误',
+            '-10026' => '操作员所充值的用户不存在',
+            '-10027' => '操作员没有充值商务版的权限',
+            '-10028' => '该用户没有转正不能充值',
+            '-10029' => '此用户没有权限从此通道发送信息',
+            '-10030' => '不能发送移动号码',
+            '-10031' => '手机号码(段)非法',
+            '-10032' => '用户使用的费率代码错误',
+            '-10033' => '非法关键词'
+        );
+        return isset($errors[$code]) ? $errors[$code] : null;
+    }
+
 }
 
 ?>
