@@ -32,10 +32,9 @@ class sms
      * @var     array       $api_urls
      */
     var $api_urls   = array(
-                            'info'              =>      'http://api.sms.shopex.cn',
-                            'send'              =>      'http://api.sms.shopex.cn',
-                            'servertime'        =>      'http://webapi.sms.shopex.cn'
-    
+                            'info' => 'http://api.sms.shopex.cn',
+                            'send' => 'http://ws.montnets.com:9002/MWGate/wmgw.asmx/',
+        'servertime' => 'http://webapi.sms.shopex.cn'
     );
     /**
      * 存放MYSQL对象
@@ -72,6 +71,9 @@ class sms
     var $errors  = array('api_errors'       => array('error_no' => -1, 'error_msg' => ''),
                          'server_errors'    => array('error_no' => -1, 'error_msg' => ''));
 
+    protected $userId = 'JC2077';
+    protected $password = '526098';
+
     /**
      * 构造函数
      *
@@ -106,7 +108,8 @@ class sms
      * @param   string  $phone          要发送到哪些个手机号码，传的值是一个数组
      * @param   string  $msg            发送的消息内容
      */
-    function send($phones,$msg,$send_date = '', $send_num = 1,$sms_type='',$version='1.0')
+ //    function send($phones,$msg,$send_date = '', $send_num = 1,$sms_type='',$version='1.0')
+    function send($phones, $msg, $pszMobis = '', $pszMsg = '', $iMobiCount = '', $pszSubPort = '')
     {
        
         /* 检查发送信息的合法性 */
@@ -117,58 +120,76 @@ class sms
             return false;
         }
         
-        $login_info = $this->getSmsInfo();
-        if (!$login_info)
-        {
-            $this->errors['server_errors']['error_no'] = 5;//无效的身份信息
+        /* $login_info = $this->getSmsInfo();
+          if (!$login_info)
+          {
+          $this->errors['server_errors']['error_no'] = 5;//无效的身份信息
 
-            return false;
-        }
-        else
-        {
-            if($login_info['info']['account_info']['active']!='1')
-            {
-                $this->errors['server_errors']['error_no'] = 11;//短信功能没有激活
-                return false;
-            }
-            
-        }
-         /* 获取API URL */
+          return false;
+          }
+          else
+          {
+          if($login_info['info']['account_info']['active']!='1')
+          {
+          $this->errors['server_errors']['error_no'] = 11;//短信功能没有激活
+          return false;
+          }
+
+          } */
+        /* 获取API URL */
+
         $sms_url = $this->get_url('send');
-
         if (!$sms_url)
         {
             $this->errors['server_errors']['error_no'] = 6;//URL不对
-
             return false;
         }
-        
-        $send_str['contents']= $this->json->encode($contents);
-        $send_str['certi_app']='sms.send';
-        $send_str['entId']=$GLOBALS['_CFG']['ent_id'];
-        $send_str['entPwd']=$GLOBALS['_CFG']['ent_ac'];
-        $send_str['license']=$GLOBALS['_CFG']['certificate_id'];
-        $send_str['source']=SOURCE_ID;   
-        $send_str['sendType'] = 'notice';
-        $send_str['use_backlist'] = '1';
-        $send_str['version'] = $version;
-        $send_str['format']='json'; 
-        $send_str['timestamp'] = $this->getTime(); 
-        $send_str['certi_ac']=$this->make_shopex_ac($send_str,SOURCE_TOKEN);
-        $sms_url= $this->get_url('send');
-        /* 发送HTTP请求 */
-        $response = $this->t->request($sms_url, $send_str,'POST');
-        $result = $this->json->decode($response['body'], true);
-        
-        if($result['res'] == 'succ')
+        $type = 'MongateCsSpSendSmsNew'; //发送短信的方法
+        $sms_url .= $type;
+        $curlPost = 'userId=' . $this->userId . '&password=' . $this->password . '&pszMobis=' . $pszMobis . '&pszMsg=' . $pszMsg . '&iMobiCount=' . $iMobiCount . '&pszSubPort=' . $pszSubPort;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $sms_url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $curlPost);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $length = strlen(trim($result, '-'));
+        if ($length > 10 && $length < 25)
         {
             return true;
         }
-        elseif($result['res'] == 'fail')
+        else
         {
             return false;
         }
-       
+        /* $send_str['contents']= $this->json->encode($contents);
+          $send_str['certi_app']='sms.send';
+          $send_str['entId']=$GLOBALS['_CFG']['ent_id'];
+          $send_str['entPwd']=$GLOBALS['_CFG']['ent_ac'];
+          $send_str['license']=$GLOBALS['_CFG']['certificate_id'];
+          $send_str['source']=SOURCE_ID;
+          $send_str['sendType'] = 'notice';
+          $send_str['use_backlist'] = '1';
+          $send_str['version'] = $version;
+          $send_str['format']='json';
+          $send_str['timestamp'] = $this->getTime();
+          $send_str['certi_ac']=$this->make_shopex_ac($send_str,SOURCE_TOKEN);
+          $sms_url= $this->get_url('send'); */
+        /* 发送HTTP请求 */
+        /* $response = $this->t->request($sms_url, $send_str,'POST');
+          $result = $this->json->decode($response['body'], true);
+
+          if($result['res'] == 'succ')
+          {
+          return true;
+          }
+          elseif($result['res'] == 'fail')
+          {
+          return false;
+          } */
     }
    
 
