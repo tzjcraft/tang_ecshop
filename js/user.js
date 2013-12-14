@@ -864,3 +864,10 @@ function calResult()
     }
   }
 }
+
+function smsCaptcha(obj)
+{
+    var frm = document.forms['formUser'];
+    var mobile = frm.elements['extend_field5'].value;
+    Ajax.call('user.php?act=sms_captcha', 'mobile_phone=' + mobile, '', 'POST', 'JSON');
+}

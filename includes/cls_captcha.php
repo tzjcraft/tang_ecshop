@@ -255,6 +255,7 @@ class captcha
      */
     function record_word($word)
     {
+        $_SESSION['sms_captcha'] = $word; //记录手机短信验证码
         $_SESSION[$this->session_word] = base64_encode($this->encrypts_word($word));
     }
 
@@ -279,6 +280,18 @@ class captcha
 
         return substr(implode('', $arr), 5, $length);
     }
+
+    function generateCaptchaString($word)
+    {
+        if (!$word)
+        {
+            $word = $this->generate_word();
+        }
+        /* 记录验证码到session */
+        $this->record_word($word);
+        return $word;
+    }
+
 }
 
 ?>
