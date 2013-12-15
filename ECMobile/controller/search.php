@@ -63,6 +63,14 @@ elseif ($sort_by == 'price_desc')
 {
     $sort = 'shop_price';
 }
+elseif ($sort_by == 'is_new_good_recommend')
+{
+    $sort = 'is_new';
+}
+elseif ($sort_by == 'is_sales')
+{
+    $sort = 'salesnum';
+}
 elseif ($sort_by == 'price_asc') {
     $sort = 'shop_price';
     $order = 'ASC';
@@ -172,8 +180,9 @@ $_REQUEST['keywords']   = !empty($_REQUEST['keywords'])   ? htmlspecialchars(tri
   }
 
   $category   = !empty($_REQUEST['category']) ? intval($_REQUEST['category'])        : 0;
-  $categories = ($category > 0)               ? ' AND ' . get_children($category)    : '';
-  // $brand      = $_REQUEST['brand']            ? " AND brand_id = '$_REQUEST[brand]'" : '';
+  $categories = ($category > 0) ? ' AND ' . get_children($category) : '';
+  $filter_is_promote = $category == -1 || true ? ' AND g.is_promote = 1 ' : '';
+// $brand      = $_REQUEST['brand']            ? " AND brand_id = '$_REQUEST[brand]'" : '';
   $brand      = $_REQUEST['brand']            ? " AND brand_id = '".$_REQUEST['brand']."'" : '';
   $outstock   = !empty($_REQUEST['outstock']) ? " AND g.goods_number > 0 "           : '';
 
@@ -316,8 +325,8 @@ $_REQUEST['keywords']   = !empty($_REQUEST['keywords'])   ? htmlspecialchars(tri
   /* 获得符合条件的商品总数 */
   $sql   = "SELECT COUNT(*) FROM " .$ecs->table('goods'). " AS g ".
       "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in ".
-      "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock ." ) ".$tag_where." )";
-  $count = $db->getOne($sql);
+      "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " )" . $filter_is_promote;
+$count = $db->getOne($sql);
 
   $max_page = ($count> 0) ? ceil($count / $size) : 1;
   if ($page > $max_page)
@@ -326,15 +335,15 @@ $_REQUEST['keywords']   = !empty($_REQUEST['keywords'])   ? htmlspecialchars(tri
   }
 
   /* 查询商品 */
-  $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.is_new, g.is_best, g.is_hot, g.shop_price AS org_price, ".
-              "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
+  $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.is_new, g.is_best, g.salesnum, g.is_hot, g.shop_price AS org_price, " .
+        "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
               "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_thumb, g.goods_img, g.original_img, g.goods_brief, g.goods_type, g.add_time, count(c.comment_id) AS comments_num " .
         "FROM " .$ecs->table('goods'). " AS g ".
           "LEFT JOIN " . $GLOBALS['ecs']->table('member_price') . " AS mp ".
                   "ON mp.goods_id = g.goods_id AND mp.user_rank = '$_SESSION[user_rank]' " .
         "LEFT JOIN " . $GLOBALS['ecs']->table('comment') . " AS c ON g.goods_id = c.id_value AND c.comment_type = 0 " .
         "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in ".
-              "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " ) " .
+              "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " ) " . $filter_is_promote .
         "GROUP BY g.goods_id " .
         "ORDER BY $sort $order";
 $res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
