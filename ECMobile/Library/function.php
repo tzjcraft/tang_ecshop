@@ -145,6 +145,10 @@ function GZ_order_query_sql($type = 'finished', $alias = '')
     {
         return " AND {$alias}shipping_status " . db_create_in(array(SS_SHIPPED)) . " ";
     }
+    elseif ($type == 'await_comment')
+    {
+        return "";
+    }
     else
     {
         die('函数 order_query_sql 参数错误');

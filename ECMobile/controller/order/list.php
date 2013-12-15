@@ -44,8 +44,9 @@ $type = _POST('type', 'await_pay');
 //await_ship 待发货
 //shipped 待收货
 //finished 历史订单
-if (!in_array($type, array('await_pay', 'await_ship', 'shipped', 'finished', 'unconfirmed'))) {
-	GZ_Api::outPut(101);
+if (!in_array($type, array('await_pay', 'await_ship', 'shipped', 'finished', 'unconfirmed', 'await_comment')))
+{
+    GZ_Api::outPut(101);
 }
 $record_count = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql($type));
 // $order_all = $db->getAll("SELECT * FROM ".$ecs->table('order_info')." WHERE user_id='$user_id'");
@@ -60,6 +61,7 @@ $record_count = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). 
 $pager  = get_pager('user.php', array('act' => $action), $record_count, $page, $page_parm['count']);
 $orders = GZ_get_user_orders($user_id, $pager['size'], $pager['start'], $type);
 // print_r($orders);exit;
+$commentedGoods = get_goods_commented($user_id);
 foreach ($orders as $key => $value) {
 	unset($orders[$key]['order_status']);
 	$orders[$key]['order_time'] = formatTime($value['order_time']);
@@ -67,9 +69,10 @@ foreach ($orders as $key => $value) {
 	//$orders[$key]['ss'] = $goods_list;
 	$goods_list_t = array();
 	// $goods_list = API_DATA("SIMPLEGOODS", $goods_list);
-	foreach ($goods_list as $v) {
-		$goods_list_t[] = array(
-		  "goods_id" => $v['goods_id'],
+	foreach ($goods_list as $goods_key => $v)
+    {
+        $goods_list_t[$goods_key] = array(
+            "goods_id" => $v['goods_id'],
 		  "name" => $v['goods_name'],
 		  "goods_number" => $v['goods_number'],
 		  "subtotal" => price_format($v['subtotal'], false),
@@ -80,7 +83,15 @@ foreach ($orders as $key => $value) {
 			'url' => API_DATA('PHOTO', $v['original_img'])
 			)
 		);
-	}
+        if ($type == 'await_comment' && in_array($v['goods_id'], $commentedGoods))
+        {
+            $goods_list_t[$goods_key]['commented'] = 1;
+        }
+        elseIf ($type == 'await_comment')
+        {
+            $goods_list_t[$goods_key]['commented'] = 0;
+        }
+    }
 
 	$orders[$key]['goods_list'] = $goods_list_t;
 	$order_detail = get_order_detail($value['order_id'], $user_id);
@@ -110,7 +121,7 @@ $pagero = array(
 		"total"  => $pager['record_count'],	 
 		"count"  => count($orders),
 		"more"   => empty($pager['page_next']) ? 0 : 1
-);
+    );
 GZ_Api::outPut($orders, $pagero);
 
 
@@ -131,11 +142,17 @@ function GZ_get_user_orders($user_id, $num = 10, $start = 0, $type = 'await_pay'
     /* 取得订单列表 */
     $arr    = array();
 
+    $orderIds = array();
+    if ($type == 'await_comment')
+    {
+        $orderIds = get_commented_order($user_id);
+    }
+    $filterCommentSql = $orderIds ? ' AND order_id NOT IN ' . '(' . implode(',', $orderIds) . ') ' : '';
     $sql = "SELECT order_id, order_sn, order_status, shipping_status, pay_status, add_time, " .
            "(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - discount) AS total_fee ".
            " FROM " .$GLOBALS['ecs']->table('order_info') .
-           " WHERE user_id = '$user_id' " . GZ_order_query_sql($type) . " ORDER BY add_time DESC";
-           // print_r($sql);exit;
+           " WHERE user_id = '$user_id' " . GZ_order_query_sql($type) . $filterCommentSql . " ORDER BY add_time DESC";
+    // print_r($sql);exit;
     $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
    	while ($row = $GLOBALS['db']->fetchRow($res))
     {
@@ -184,4 +201,33 @@ function GZ_order_goods($order_id)
     return $goods_list;
 }
 
+function get_commented_order($user_id)
+{
+    $sql = "SELECT o.order_id,og.goods_id, c.comment_id FROM " . $GLOBALS['ecs']->table('order_info') . " AS o
+join " . $GLOBALS['ecs']->table('order_goods') . " AS og on o.order_id = og.order_id
+join " . $GLOBALS['ecs']->table('comment') . " AS c on c.id_value = og.goods_id and c.comment_type = 0
+where o.user_id = " . $user_id . " AND o.`shipping_status`=2 GROUP BY o.order_id";
+    $res = $GLOBALS['db']->query($sql);
+    $orderIds = array();
+    while ($row = $GLOBALS['db']->fetchRow($res))
+    {
+        $orderIds[] = $row['order_id'];
+    }
+    return $orderIds;
+}
+
+function get_goods_commented($user_id)
+{
+    $sql = "SELECT o.order_id,og.goods_id, c.comment_id FROM " . $GLOBALS['ecs']->table('order_info') . " AS o
+join " . $GLOBALS['ecs']->table('order_goods') . " AS og on o.order_id = og.order_id
+join " . $GLOBALS['ecs']->table('comment') . " AS c on c.id_value = og.goods_id and c.comment_type = 0
+where o.user_id = " . $user_id . " AND o.`shipping_status`=2 GROUP BY og.goods_id";
+    $res = $GLOBALS['db']->query($sql);
+    $goodsIds = array();
+    while ($row = $GLOBALS['db']->fetchRow($res))
+    {
+        $goodsIds[] = $row['order_id'];
+    }
+    return $goodsIds;
+}
 
