@@ -31,7 +31,7 @@ define('INIT_NO_USERS', true);
 require(EC_PATH . '/includes/init.php');
 include_once(EC_PATH . '/includes/lib_order.php');
 include_once(EC_PATH . '/includes/lib_goods.php');
-GZ_Api::authSession();
+//GZ_Api::authSession();
 $json = _POST('json', null);
 
 $commentData = json_decode($json);
