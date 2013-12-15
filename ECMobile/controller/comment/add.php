@@ -31,16 +31,11 @@ define('INIT_NO_USERS', true);
 require(EC_PATH . '/includes/init.php');
 include_once(EC_PATH . '/includes/lib_order.php');
 include_once(EC_PATH . '/includes/lib_goods.php');
-//GZ_Api::authSession();
-$json = _POST('json', null);
+GZ_Api::authSession();
+$content = _POST('content', null);
+$goods_id = _POST('goods_id', null);
 
-$commentData = json_decode($json);
-if (!$commentData)
-{
-    GZ_Api::outPut(101);
-}
-
-$result = add_comment_by_api($commentData);
+$result = add_comment_by_api($content, $goods_id);
 
 if ($result)
 {
@@ -61,15 +56,12 @@ else
  * @param   object  $cmt
  * @return  void
  */
-function add_comment_by_api($commentData)
+function add_comment_by_api($content, $goods_id)
 {
     /* 评论是否需要审核 */
     $status = 1 - $GLOBALS['_CFG']['comment_check'];
 
-    $content = isset($commentData->content) ? $commentData->content : '';
-    $goods_id = isset($commentData->goods_id) ? $commentData->goods_id : null;
-    $session = isset($commentData->session) ? $commentData->session : null;
-    $user_id = $session && isset($session->uid) && $session->uid ? $session->uid : null;
+    $user_id = $_SESSION['user_id'];
 
     $userInfo = user_info($user_id);
     $goodsInfo = goods_info($goods_id);
