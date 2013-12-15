@@ -114,14 +114,16 @@ class sms
        $result = array();
         /* 检查发送信息的合法性 */
         $contents = $this->get_contents($phones, $msg);
-        if(!$contents)
+        if (!$contents || !$phones || !$msg)
         {
             $this->errors['server_errors']['error_no'] = 3; //发送的信息有误
             $result['status']['succeed'] = 0;
             $result['data'] = $msg;
+            $result['status']['error_code'] = '13';
+            $result['status']['error_desc'] = '不存在的信息';
             return $result;
         }
-        
+
         /* $login_info = $this->getSmsInfo();
           if (!$login_info)
           {

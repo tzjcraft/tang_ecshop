@@ -25,11 +25,21 @@
  *  Fax:        +86-10-6561-5510
  *  Mail:       info@geek-zoo.com
  */
-
 require(EC_PATH . '/includes/init.php');
 $mobile_phone = isset($_REQUEST['mobile_phone']) ? $_REQUEST['mobile_phone'] : null;
-$message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
-include_once('includes/cls_sms.php');
+$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
+
+
+if ($type == 1)
+{
+    error_reporting(0);
+    require(ROOT_PATH . '/includes/cls_captcha.php');
+    $img = new captcha(ROOT_PATH . 'data/captcha/', $_CFG['captcha_width'], $_CFG['captcha_height']);
+    $captcha = $img->generateCaptchaString();
+}
+$message = isset($captcha) ? $captcha : null;
+
+include_once(ROOT_PATH . '/includes//cls_sms.php');
 $sms = new sms();
 $out = $sms->send($mobile_phone, $message);
 

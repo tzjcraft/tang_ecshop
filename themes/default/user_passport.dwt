@@ -159,7 +159,7 @@
           <td align="right" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$field.reg_field_name}
           <td>
           <input name="extend_field{$field.id}" type="text" size="25" class="inputBg" /><!-- {if $field.is_need} --><span style="color:#FF0000"> *</span><!-- {/if} -->
-<!-- {if $field.id eq 5} --><input class="button" type="button" onclick="return smsCaptcha(this)" value=" 发送短信验证码 "><!--{/if}-->
+<!-- {if $field.id eq 5} --><!-- 判断是否启用验证码{if $enabled_captcha} --><input class="button" type="button" onclick="return smsCaptcha(this)" value=" 发送短信验证码 "><!--{/if}--><!--{/if}-->
           </td>
         </tr>
 	<!-- {/if} -->
@@ -169,8 +169,8 @@
       <td align="right">{$lang.comment_captcha}</td>
       <td><input type="text" size="8" name="captcha" class="inputBg" />
 <!--去掉图片验证码，使用手机短信验证码-->
-
-      <img src="captcha.php?{$rand}" alt="captcha" style="vertical-align: middle;cursor: pointer;" onClick="this.src='captcha.php?'+Math.random()" /> </td>
+<!--
+      <img src="captcha.php?{$rand}" alt="captcha" style="vertical-align: middle;cursor: pointer;" onClick="this.src='captcha.php?'+Math.random()" />--> </td>
       </tr>
       <!--{/if}-->
         <tr>
