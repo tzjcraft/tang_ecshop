@@ -30,7 +30,7 @@ function GZ_user_info($user_id)
 {
 	global $db,$ecs;
 
-	$user_info = user_info($user_id);
+    $user_info = user_info($user_id);
 
 	$collection_num = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('collect_goods')." WHERE user_id='$user_id' ORDER BY add_time DESC");
 	
@@ -39,6 +39,7 @@ function GZ_user_info($user_id)
 	$shipped = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('shipped'));
 	$finished = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('finished'));
 	$bouns = get_user_available_bouns_list($user_id);
+       $await_comment = get_nopaycomment($user_id);
 
     include_once(ROOT_PATH . 'includes/lib_clips.php');
     $surplus_amount = get_user_surplus($user_id);
@@ -83,7 +84,8 @@ function GZ_user_info($user_id)
             'await_pay' => $await_pay,
             'await_ship' => $await_ship,
             'shipped' => $shipped,
-            'finished' => $finished
+            'finished' => $finished,
+            'await_comment' => $await_comment
         )
     );
 }
@@ -457,5 +459,26 @@ function get_user_available_bouns_list($user_id)
         $arr[] = $row;
     }
     return $arr;
+}
+
+function get_nopaycomment($user_id)
+{
+    $sql = 'SELECT  g.*,o.add_time,count(g.goods_sn) as nocomment  ' .
+            'FROM ' . $GLOBALS['ecs']->table('order_goods') . ' AS g join  ' .
+            $GLOBALS['ecs']->table('order_info') . ' AS o ' .
+            " on g.order_id=o.order_id join  " . $GLOBALS['ecs']->table('comment') . " as c  on c.id_value!=g.goods_id where o.`shipping_status`=2 and c.comment_type=0 and o.`user_id`= '$user_id' " .
+            'group  BY g.goods_sn ';
+    $res = $GLOBALS['db']->query($sql);
+    $arr = array();
+    while ($row = $GLOBALS['db']->fetchRow($res))
+    {
+        $row['goods_id'] = $row['goods_id'];
+        $row['goods_sn'] = $row['goods_sn'];
+        $row['goods_name'] = $row['goods_name'];
+        $row['add_time'] = local_date('Y-m-d', $row['add_time']);
+
+        $arr[] = $row;
+    }
+    return count($arr);
 }
 
