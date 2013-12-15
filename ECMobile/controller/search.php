@@ -69,7 +69,7 @@ elseif ($sort_by == 'is_new_good_recommend')
 }
 elseif ($sort_by == 'is_sales')
 {
-    $sort = 'salesnum';
+    $sort = 'sales_num';
 }
 elseif ($sort_by == 'price_asc') {
     $sort = 'shop_price';
@@ -335,7 +335,7 @@ $count = $db->getOne($sql);
   }
 
   /* 查询商品 */
-  $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.is_new, g.is_best, g.salesnum, g.is_hot, g.shop_price AS org_price, " .
+  $sql = "SELECT g.goods_id, g.goods_name, g.market_price, g.is_new, g.is_best, g.sales_num, g.is_hot, g.shop_price AS org_price, " .
         "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS shop_price, ".
               "g.promote_price, g.promote_start_date, g.promote_end_date, g.goods_thumb, g.goods_img, g.original_img, g.goods_brief, g.goods_type, g.add_time, count(c.comment_id) AS comments_num " .
         "FROM " .$ecs->table('goods'). " AS g ".
@@ -388,18 +388,18 @@ $arr = array();
 
       $arr[$row['goods_id']]['goods_id']      = $row['goods_id'];
       $arr[$row['goods_id']]['goods_name'] = $row['goods_name'];
-
-      $arr[$row['goods_id']]['type']          = $row['goods_type'];
+      
+    $arr[$row['goods_id']]['type']          = $row['goods_type'];
       $arr[$row['goods_id']]['market_price']  = price_format($row['market_price']);
       $arr[$row['goods_id']]['shop_price']    = price_format($row['shop_price']);
       $arr[$row['goods_id']]['promote_price'] = ($promote_price > 0) ? price_format($promote_price) : '';
-
-      $arr[$row['goods_id']]['goods_brief']   = $row['goods_brief'];
-      $arr[$row['goods_id']]['original_img']   = get_image_path($row['goods_id'], $row['original_img'], true);
-      $arr[$row['goods_id']]['goods_img']     = get_image_path($row['goods_id'], $row['goods_img']);
-      $arr[$row['goods_id']]['goods_thumb']     = get_image_path($row['goods_id'], $row['goods_thumb']);
-      $arr[$row['goods_id']]['url']           = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
-  }
+      $arr[$row['goods_id']]['sales_num'] = $row['sales_num'] ? $row['sales_num'] : 0;
+      $arr[$row['goods_id']]['goods_brief'] = $row['goods_brief'];
+      $arr[$row['goods_id']]['original_img'] = get_image_path($row['goods_id'], $row['original_img'], true);
+      $arr[$row['goods_id']]['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+      $arr[$row['goods_id']]['goods_thumb'] = get_image_path($row['goods_id'], $row['goods_thumb']);
+      $arr[$row['goods_id']]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
+}
 
 $smarty->assign('goods_list', $arr);
   $smarty->assign('category',   $category);
@@ -456,9 +456,9 @@ if (isset($_REQUEST['pickout']))
   $smarty->assign('helps',       get_shop_help());      // 网店帮助
   $smarty->assign('top_goods',  get_top10());           // 销售排行
   $smarty->assign('promotion_info', get_promotion_info());
-  $data = API_DATA("SIMPLEGOODS", $smarty->_var['goods_list']);
-
-    if (!empty($smarty->_var['pager'])) {
+$data = API_DATA("SIMPLEGOODS", $smarty->_var['goods_list']);
+  
+if (!empty($smarty->_var['pager'])) {
     	$pager = array(
     			"total"  => $smarty->_var['pager']['record_count'],	 
     			"count"  => count($smarty->_var['goods_list']),

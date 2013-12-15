@@ -282,7 +282,8 @@ function API_DATA($type, $readData)
 			  "market_price" => $readData['market_price'],
 			  "shop_price" => $readData['shop_price'],
 			  "promote_price" => $readData['promote_price'],
-			  "img" => array(
+                "sales_num" => $readData['sales_num'],
+                "img" => array(
 				'thumb'=>API_DATA('PHOTO', $readData['goods_img']),
 				'url' => API_DATA('PHOTO', $readData['original_img']),
                 'small' => API_DATA('PHOTO', $readData['goods_thumb'])
