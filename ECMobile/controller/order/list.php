@@ -61,7 +61,6 @@ $record_count = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). 
 $pager  = get_pager('user.php', array('act' => $action), $record_count, $page, $page_parm['count']);
 $orders = GZ_get_user_orders($user_id, $pager['size'], $pager['start'], $type);
 // print_r($orders);exit;
-$commentedGoods = get_goods_commented($user_id);
 foreach ($orders as $key => $value) {
 	unset($orders[$key]['order_status']);
 	$orders[$key]['order_time'] = formatTime($value['order_time']);
@@ -83,14 +82,6 @@ foreach ($orders as $key => $value) {
 			'url' => API_DATA('PHOTO', $v['original_img'])
 			)
 		);
-        if ($type == 'await_comment' && in_array($v['goods_id'], $commentedGoods))
-        {
-            $goods_list_t[$goods_key]['commented'] = 1;
-        }
-        elseIf ($type == 'await_comment')
-        {
-            $goods_list_t[$goods_key]['commented'] = 0;
-        }
     }
 
 	$orders[$key]['goods_list'] = $goods_list_t;
@@ -215,19 +206,3 @@ where o.user_id = " . $user_id . " AND o.`shipping_status`=2 GROUP BY o.order_id
     }
     return $orderIds;
 }
-
-function get_goods_commented($user_id)
-{
-    $sql = "SELECT o.order_id,og.goods_id, c.comment_id FROM " . $GLOBALS['ecs']->table('order_info') . " AS o
-join " . $GLOBALS['ecs']->table('order_goods') . " AS og on o.order_id = og.order_id
-join " . $GLOBALS['ecs']->table('comment') . " AS c on c.id_value = og.goods_id and c.comment_type = 0
-where o.user_id = " . $user_id . " AND o.`shipping_status`=2 GROUP BY og.goods_id";
-    $res = $GLOBALS['db']->query($sql);
-    $goodsIds = array();
-    while ($row = $GLOBALS['db']->fetchRow($res))
-    {
-        $goodsIds[] = $row['order_id'];
-    }
-    return $goodsIds;
-}
-
