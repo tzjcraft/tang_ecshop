@@ -1653,6 +1653,11 @@ elseif ($_REQUEST['step'] == 'done')
             " FROM " .$ecs->table('cart') .
             " WHERE session_id = '".SESS_ID."' AND rec_type = '$flow_type'";
     $db->query($sql);
+    /* 插入商品表的salesnum 字段，统计销量排行 */
+    $sql = "update " . $GLOBALS['ecs']->table('goods') . " AS a, " . $GLOBALS['ecs']->table('cart') . " AS b " .
+            " set a.sales_num= a.sales_num+ b.goods_number" .
+            " WHERE a.goods_id=b.goods_id AND b.session_id = '" . SESS_ID . "' AND b.rec_type = '$flow_type'";
+    $db->query($sql);
     /* 修改拍卖活动状态 */
     if ($order['extension_code']=='auction')
     {
