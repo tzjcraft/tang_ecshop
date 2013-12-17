@@ -1707,7 +1707,8 @@ elseif ($_REQUEST['step'] == 'done')
         $sms = new sms();
         $msg = $order['pay_status'] == PS_UNPAYED ?
             $_LANG['order_placed_sms'] : $_LANG['order_placed_sms'] . '[' . $_LANG['sms_paid'] . ']';
-        $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']),'', 13,1);
+        $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
+        $sms->send($consignee['mobile'],'订单号: ' . $order['order_sn']);
     }
 
     /* 如果订单金额为0 处理虚拟卡 */
