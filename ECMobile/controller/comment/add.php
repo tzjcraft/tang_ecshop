@@ -31,10 +31,11 @@ define('INIT_NO_USERS', true);
 require(EC_PATH . '/includes/init.php');
 include_once(EC_PATH . '/includes/lib_order.php');
 include_once(EC_PATH . '/includes/lib_goods.php');
-GZ_Api::authSession();
-$content = _POST('content', null);
-$goods_id = _POST('goods_id', null);
+$commentArray = $_POST;
+$content = isset($commentArray['content']) ? $commentArray['content'] : null;
+$goods_id = isset($commentArray['goods_id']) ? $commentArray['goods_id'] : null;
 
+GZ_Api::authSession();
 $result = add_comment_by_api($content, $goods_id);
 
 if ($result)
@@ -69,7 +70,7 @@ function add_comment_by_api($content, $goods_id)
     {
         GZ_Api::outPut(101);
     }
-    
+
     $email = htmlspecialchars($userInfo['email']);
     $user_name = htmlspecialchars($userInfo['user_name']);
 
