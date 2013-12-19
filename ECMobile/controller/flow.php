@@ -669,7 +669,13 @@ switch ($tmp[0]) {
 	        $order[$key] = addslashes($value);
 	    }
 
-	   /* 判断是不是实体商品 */
+        if ($assign_shipping_time = trim($_POST['assign_shipping_time']))
+        {
+            $assign_shipping_time = date('Y-m-d H:i:s', strtotime($assign_shipping_time));
+            $order['assign_shipping_time'] = $assign_shipping_time;
+        }
+
+        /* 判断是不是实体商品 */
 	    foreach ($cart_goods AS $val)
 	    {
 	        /* 统计实体商品的个数 */
