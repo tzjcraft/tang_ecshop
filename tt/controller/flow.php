@@ -669,7 +669,7 @@ switch ($tmp[0]) {
 	        $order[$key] = addslashes($value);
 	    }
 
-        if ($assign_shipping_time = trim($_POST['assign_shipping_time']))
+        if (isset($_POST['assign_shipping_time']) && $assign_shipping_time = trim($_POST['assign_shipping_time']))
         {
             $assign_shipping_time = date('Y-m-d H:i:s', strtotime($assign_shipping_time));
             $order['assign_shipping_time'] = $assign_shipping_time;
