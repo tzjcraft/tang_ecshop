@@ -42,7 +42,7 @@ if ($result)
 {
     $addStatus = array();
     $addStatus['status']['succeed'] = 1;
-    $addStatus['data'] = '您的评论已经成功发表，请等待管理员的审核! ';
+    $addStatus['data'] = '感谢您给出宝贵评价！ ';
     GZ_Api::outPut($addStatus);
 }
 else

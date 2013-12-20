@@ -48,7 +48,17 @@ if (!in_array($type, array('await_pay', 'await_ship', 'shipped', 'finished', 'un
 {
     GZ_Api::outPut(101);
 }
-$record_count = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql($type));
+
+$commentedOrderIds = $type == 'await_comment' ? get_commented_order($user_id) : array();
+$records = $db->getAll("SELECT order_id FROM " . $ecs->table('order_info') . " WHERE user_id = '$user_id'" . GZ_order_query_sql($type));
+$orderids = array();
+foreach ($records as $orderRecords)
+{
+    $orderIds[] = $orderRecords['order_id'];
+}
+$orderIds = array_diff($orderIds, $commentedOrderIds);
+$record_count = count($orderIds);
+
 // $order_all = $db->getAll("SELECT * FROM ".$ecs->table('order_info')." WHERE user_id='$user_id'");
 // foreach ($order_all[0] as $key => $val) {
 //   if ($order_all[0][$key] == $order_all[1][$key]) {
@@ -59,7 +69,7 @@ $record_count = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). 
 // $sql = "SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql($type);
 //  print_r($sql);exit;
 $pager  = get_pager('user.php', array('act' => $action), $record_count, $page, $page_parm['count']);
-$orders = GZ_get_user_orders($user_id, $pager['size'], $pager['start'], $type);
+$orders = GZ_get_user_orders($user_id, $pager['size'], $pager['start'], $type, $commentedOrderIds);
 // print_r($orders);exit;
 foreach ($orders as $key => $value) {
 	unset($orders[$key]['order_status']);
@@ -106,8 +116,8 @@ foreach ($orders as $key => $value) {
          'order_sn' => $order_detail['order_sn']
      );
 
-}
-// print_r($orders);exit;
+ }
+ // print_r($orders);exit;
 $pagero = array(
 		"total"  => $pager['record_count'],	 
 		"count"  => count($orders),
@@ -128,24 +138,19 @@ GZ_Api::outPut($orders, $pagero);
  * @param   int         $start          列表起始位置
  * @return  array       $order_list     订单列表
  */
-function GZ_get_user_orders($user_id, $num = 10, $start = 0, $type = 'await_pay')
+function GZ_get_user_orders($user_id, $num = 10, $start = 0, $type = 'await_pay', $commentedOrderIds = array())
 {
     /* 取得订单列表 */
     $arr    = array();
 
-    $orderIds = array();
-    if ($type == 'await_comment')
-    {
-        $orderIds = get_commented_order($user_id);
-    }
-    $filterCommentSql = $orderIds ? ' AND order_id NOT IN ' . '(' . implode(',', $orderIds) . ') ' : '';
+    $filterCommentSql = $commentedOrderIds ? ' AND order_id NOT IN ' . '(' . implode(',', $commentedOrderIds) . ') ' : '';
     $sql = "SELECT order_id, order_sn, order_status, shipping_status, pay_status, add_time, " .
            "(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - discount) AS total_fee ".
            " FROM " .$GLOBALS['ecs']->table('order_info') .
            " WHERE user_id = '$user_id' " . GZ_order_query_sql($type) . $filterCommentSql . " ORDER BY add_time DESC";
     // print_r($sql);exit;
     $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
-   	while ($row = $GLOBALS['db']->fetchRow($res))
+    while ($row = $GLOBALS['db']->fetchRow($res))
     {
 
         $row['shipping_status'] = ($row['shipping_status'] == SS_SHIPPED_ING) ? SS_PREPARING : $row['shipping_status'];
@@ -197,7 +202,7 @@ function get_commented_order($user_id)
     $sql = "SELECT o.order_id,og.goods_id, c.comment_id FROM " . $GLOBALS['ecs']->table('order_info') . " AS o
 join " . $GLOBALS['ecs']->table('order_goods') . " AS og on o.order_id = og.order_id
 join " . $GLOBALS['ecs']->table('comment') . " AS c on c.id_value = og.goods_id and c.comment_type = 0
-where o.user_id = " . $user_id . " AND o.`shipping_status`=2 GROUP BY o.order_id";
+where o.user_id = " . $user_id . " AND o.`shipping_status`=2 AND c.user_id = " . $user_id . " GROUP BY o.order_id";
     $res = $GLOBALS['db']->query($sql);
     $orderIds = array();
     while ($row = $GLOBALS['db']->fetchRow($res))
