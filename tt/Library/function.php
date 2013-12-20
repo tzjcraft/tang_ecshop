@@ -470,7 +470,7 @@ function get_nopaycomment($user_id)
     $sql = 'SELECT  g.*,o.add_time,count(g.goods_sn) as nocomment  ' .
             'FROM ' . $GLOBALS['ecs']->table('order_goods') . ' AS g join  ' .
             $GLOBALS['ecs']->table('order_info') . ' AS o ' .
-            " on g.order_id=o.order_id join  " . $GLOBALS['ecs']->table('comment') . " as c  on c.id_value!=g.goods_id where o.`shipping_status`=2 and c.comment_type=0 and o.`user_id`= '$user_id' " .
+            " on g.order_id=o.order_id join  " . $GLOBALS['ecs']->table('comment') . " as c  on c.id_value!=g.goods_id where o.`shipping_status`=2 and c.comment_type=0 and o.`user_id`= " . $user_id . " AND c.user_id = " . $user_id . " " .
             'group  BY g.goods_sn ';
     $res = $GLOBALS['db']->query($sql);
     $arr = array();
