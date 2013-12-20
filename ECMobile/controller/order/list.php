@@ -116,8 +116,8 @@ foreach ($orders as $key => $value) {
          'order_sn' => $order_detail['order_sn']
      );
 
-}
-// print_r($orders);exit;
+ }
+ // print_r($orders);exit;
 $pagero = array(
 		"total"  => $pager['record_count'],	 
 		"count"  => count($orders),
@@ -150,7 +150,7 @@ function GZ_get_user_orders($user_id, $num = 10, $start = 0, $type = 'await_pay'
            " WHERE user_id = '$user_id' " . GZ_order_query_sql($type) . $filterCommentSql . " ORDER BY add_time DESC";
     // print_r($sql);exit;
     $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
-   	while ($row = $GLOBALS['db']->fetchRow($res))
+    while ($row = $GLOBALS['db']->fetchRow($res))
     {
 
         $row['shipping_status'] = ($row['shipping_status'] == SS_SHIPPED_ING) ? SS_PREPARING : $row['shipping_status'];
@@ -202,7 +202,7 @@ function get_commented_order($user_id)
     $sql = "SELECT o.order_id,og.goods_id, c.comment_id FROM " . $GLOBALS['ecs']->table('order_info') . " AS o
 join " . $GLOBALS['ecs']->table('order_goods') . " AS og on o.order_id = og.order_id
 join " . $GLOBALS['ecs']->table('comment') . " AS c on c.id_value = og.goods_id and c.comment_type = 0
-where o.user_id = " . $user_id . " AND o.`shipping_status`=2 AND c.status = 1 GROUP BY o.order_id";
+where o.user_id = " . $user_id . " AND o.`shipping_status`=2 AND c.user_id = " . $user_id . " GROUP BY o.order_id";
     $res = $GLOBALS['db']->query($sql);
     $orderIds = array();
     while ($row = $GLOBALS['db']->fetchRow($res))
