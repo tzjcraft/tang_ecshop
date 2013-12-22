@@ -403,6 +403,96 @@ elseif ($act == 'get_password')
         $smarty->display('user_passport_forget.html');
     }
 }
+elseif ($act == 'validate_user')
+{
+    $username = trim($_POST['user_name']);
+    $mobile = trim($_POST['mobile']);
+    $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('users') . "WHERE user_name = '" . $username . "'";
+    $user_info = $GLOBALS['db']->getRow($sql, true);
+    if (!$user_info || $mobile != $user_info['mobile_phone'])
+    {
+        $message = '用户名不存在或与手机号码不匹配';
+        $smarty->assign('action', 'get_password');
+        $smarty->assign('message', $message);
+        $smarty->display('user_passport_forget.html');
+    }
+    else
+    {
+        error_reporting(0);
+        require(ROOT_PATH . '/includes/cls_captcha.php');
+        $img = new captcha(ROOT_PATH . 'data/captcha/', $_CFG['captcha_width'], $_CFG['captcha_height']);
+        $captcha = $img->generateCaptchaString();
+        $message = $captcha;
+
+        include_once(ROOT_PATH . '/includes//cls_sms.php');
+        $sms = new sms();
+        $sms->send($mobile, $message);
+        $_SESSION['forget_passwod_uid'] = $user_info['user_id'];
+        $smarty->assign('action', 'send_sms_captcha');
+        $smarty->display('user_passport_forget.html');
+    }
+}
+elseif ($act == 'send_sms_captcha')
+{
+    include_once(ROOT_PATH . '/includes/lib_passport.php');
+    $status = false;
+    $captcha = trim($_POST['captcha']);
+    if (!$captcha || strtoupper($captcha) != $_SESSION['sms_captcha'])
+    {
+        $message = '验证码错误';
+        $smarty->assign('action', 'send_sms_captcha');
+        $smarty->assign('message', $message);
+        $smarty->display('user_passport_forget.html');
+    }
+    else
+    {
+        $message = '';
+        $smarty->assign('action', 'reset_password_by_captcha');
+        $smarty->assign('message', $message);
+        $smarty->assign('status', $status);
+        $smarty->display('user_passport_forget.html');
+    }
+}
+elseif ($act == 'reset_password_by_captcha')
+{
+    $newpass = trim($_POST['new_password']);
+    $confirmPass = trim($_POST['new_password']);
+    $user_id = $_SESSION['forget_passwod_uid'];
+
+    if (strlen($newpass) < 6)
+    {
+        $message = '登录密码不能少于 6 个字符。';
+    }
+    else
+    {
+
+        $user_info = $user->get_profile_by_id($user_id); //论坛记录
+        if ($user_info && $newpass && $newpass == $confirmPass)
+        {
+
+            if ($user->edit_user(array('username' => $user_info['user_name'], 'password' => $newpass)))
+            {
+                $sql = "UPDATE " . $ecs->table('users') . "SET `ec_salt`='0' WHERE user_id= '" . $uid . "'";
+                $db->query($sql);
+                $user->logout();
+                $message = '您的新密码已设置成功！';
+                $status = true;
+            }
+            else
+            {
+                $message = '您输入的原密码不正确！';
+            }
+        }
+        else
+        {
+            $message = '您输入的原密码不正确！';
+        }
+    }
+    $smarty->assign('action', 'reset_password_by_captcha');
+    $smarty->assign('message', $message);
+    $smarty->assign('status', $status);
+    $smarty->display('user_passport_forget.html');
+}
 /* 发送密码修改确认邮件 */
 elseif ($act == 'send_pwd_email')
 {

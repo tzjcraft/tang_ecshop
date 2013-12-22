@@ -52,13 +52,35 @@
     <!--{if $action eq 'get_password'} -->
     {$message}<br />
     <!--{if !$status}-->
-    <form name="getPassword" method="post" action="user.php?act=send_pwd_email">
-    	<span class="new-input-span new-mg-b10"><input type="text" class="new-input" name="user_name" id="username" value="" placeholder="请输入您注册的用户名"/></span>
-      <span class="new-input-span new-mg-b10"><input type="password" value="" class="new-input" name="email" id="pwd" placeholder="注册时填写的电子邮件地址"/></span>
-    	<input type="submit" class="new-abtn-type new-mg-t15" style="border:0;width:100%;cursor:pointer" value="提 交">
+    <form name="getPassword" method="post" action="user.php?act=validate_user">
+        <span class="new-input-span new-mg-b10"><input type="text" class="new-input" name="user_name" id="username" value="" placeholder="请输入您注册的用户名"/></span>
+        <span class="new-input-span new-mg-b10"><input type="text" class="new-input" name="mobile" id="mobile" value="" placeholder="请输入您注册的手机号码"/></span>
+        <!--<span class="new-input-span new-mg-b10"><input type="password" value="" class="new-input" name="email" id="pwd" placeholder="注册时填写的电子邮件地址"/></span>-->
+        <input type="submit" class="new-abtn-type new-mg-t15" style="border:0;width:100%;cursor:pointer" value="提 交">
     <!--{/if}-->
     <!--{/if}-->
-    {$footer}
+    <!--{if $action eq 'send_sms_captcha'} -->
+    {$message}<br />
+    <!--{if !$status}-->
+    <form name="getPassword" method="post" action="user.php?act=send_sms_captcha">
+        <span class="new-input-span new-mg-b10"><input type="text" class="new-input" name="captcha" id="username" value="" placeholder="请输入您短信验证码"/></span>
+        <span class="new-input-span new-mg-b10"><a href="user.php?act=get_password">返回</a></span>
+        <input type="submit" class="new-abtn-type new-mg-t15" style="border:0;width:100%;cursor:pointer" value="提 交">
+        <!--{/if}-->
+        <!--{/if}-->
+        <!-- {if $action eq 'reset_password_by_captcha'} -->
+        {$message}<br />
+        <!--{if $status}-->
+        <a href="user.php">点击登录</a>
+        <!--{else}-->
+        <form name="getPassword2" method="post" action="user.php?act=reset_password_by_captcha">
+            <span class="new-input-span new-mg-b10"><input type="password" class="new-input" name="new_password" id="username" value="" placeholder="新密码"/></span>
+            <span class="new-input-span new-mg-b10"><input type="password" value="" class="new-input" name="confirm_password" id="pwd" placeholder="确认密码"/></span>
+            <input type="submit" class="new-abtn-type new-mg-t15" style="border:0;width:100%;cursor:pointer" value="确 定">
+        </form>
+        <!--{/if}-->
+        <!--{/if}-->
+        {$footer}
   </div> 
 </div>
 </body>
