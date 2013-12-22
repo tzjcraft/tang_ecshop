@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{$goods_info.goods_name}的评论 - {$shop_name}</title>
+<title>在线客服 - {$shop_name}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="ecy.cc">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0">
@@ -17,22 +17,19 @@
 </head>
 <body>
 {include file='head2.html'}
-<div style="margin-top: 8px;padding: 10px;background-color: #f2ebe3;border-top: 1px solid #ddd2c0;border-bottom: 1px solid #ddd2c0;box-shadow: inset 0 1px 0 #fff;"> <span class="red">{$goods_info.goods_name}的评论</span></div>
-{foreach from=$comment_data item=comment}
-<div class="mc radius">
-	{$comment.username} 评论：{$comment.content}
-	{if $comment.re_username}
-		<div class="red"style="margin-top:10px;padding-top:10px;border-top: 1px solid #e5dcc7;">{$comment.re_username} 回复:{$comment.re_content}</div>
-	{/if}
+<div class="kefu mc radius">
+	<ul>
+		<li>商店名称：{$shop_name}</li>
+		<li>商店地址：{$shop_address}</li>
+		<li>客服QQ：{$qq}</li>
+		<li>淘宝旺旺：{$ww}</li>
+		<li>客服邮箱：{$service_email}</li>
+		<li style="border:none;"><a class="telephonelink" href="tel:13311176096" style="color:#FFF;">13311176096</a></li>
+	</ul>
+	<div>
+	</div>
+
 </div>
-{foreachelse}
-<div class="mc radius">
-	暂无此商品评论
-</div>
-{/foreach}
-{if $pagebar}
-{$pagebar}
-{/if}
 {include file='foot.html'}
 </body>
 </html>

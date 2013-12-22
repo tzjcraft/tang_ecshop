@@ -1,23 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
+<title>{$article_data.title} - {$shop_name}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ECShop_mobile</title>
+<meta name="author" content="ecy.cc">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" type="text/css" href="style/base2013.css" />
+<link rel="stylesheet" type="text/css" href="style/all_html5.css" />
+<link rel="stylesheet" type="text/css" href="style/chapter.css" />
+<script src="js/jquery-1.6.2.min.js" type="text/javascript"></script>
+<script src="js/common1.js" type="text/javascript"></script>
 </head>
-
 <body>
-<p align='left'>
+{include file='head2.html'}
+<div class="article-box radius w">
 {if $article_data}
-    {$article_data.title}<br/>
-    --------------<br/>
-    {$article_data.content}<br/>
+	<h3>{$article_data.title}</h3>
+	{$article_data.content}
 {else}
-    错误地址<br/>
+	错误地址
 {/if}
---------------<br/>
-<a href="javascript:history.back(-1)">回上一页</a><br/>
-<a href='index.php'>返回首页</a>
-{$footer}
-</p>
+</div>
+{include file='foot.html'}
 </body>
 </html>
