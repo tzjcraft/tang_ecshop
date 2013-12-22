@@ -467,22 +467,25 @@ function get_user_available_bouns_list($user_id)
 
 function get_nopaycomment($user_id)
 {
-    $sql = 'SELECT  g.*,o.add_time,count(g.goods_sn) as nocomment  ' .
+    $sql = 'SELECT  DISTINCT g.goods_id,o.add_time  ' .
             'FROM ' . $GLOBALS['ecs']->table('order_goods') . ' AS g join  ' .
             $GLOBALS['ecs']->table('order_info') . ' AS o ' .
-            " on g.order_id=o.order_id join  " . $GLOBALS['ecs']->table('comment') . " as c  on c.id_value!=g.goods_id where o.`shipping_status`=2 and c.comment_type=0 and o.`user_id`= " . $user_id . " AND c.user_id = " . $user_id . " " .
-            'group  BY g.goods_sn ';
+            " on g.order_id=o.order_id join  " . $GLOBALS['ecs']->table('comment') . " as c  on c.id_value=g.goods_id where o.`shipping_status`=2 and c.comment_type=0 and o.`user_id`= " . $user_id . " AND c.user_id = " . $user_id;
     $res = $GLOBALS['db']->query($sql);
-    $arr = array();
+    $commented = array();
     while ($row = $GLOBALS['db']->fetchRow($res))
     {
-        $row['goods_id'] = $row['goods_id'];
-        $row['goods_sn'] = $row['goods_sn'];
-        $row['goods_name'] = $row['goods_name'];
-        $row['add_time'] = local_date('Y-m-d', $row['add_time']);
-
-        $arr[] = $row;
+        $commented[] = $row['goods_id'];
     }
-    return count($arr);
+
+    $sql = 'select DISTINCT g.goods_id FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS o JOIN ' . $GLOBALS['ecs']->table('order_goods') . ' AS g on o.order_id = g.order_id';
+    $res = $GLOBALS['db']->query($sql);
+    $userGoods = array();
+    while ($row = $GLOBALS['db']->fetchRow($res))
+    {
+        $userGoods[] = $row['goods_id'];
+    }
+    $uncommented = array_diff($userGoods, $commented);
+    return count($uncommented);
 }
 

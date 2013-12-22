@@ -49,15 +49,85 @@ if (!in_array($type, array('await_pay', 'await_ship', 'shipped', 'finished', 'un
     GZ_Api::outPut(101);
 }
 
-$commentedOrderIds = $type == 'await_comment' ? get_commented_order($user_id) : array();
-$records = $db->getAll("SELECT order_id FROM " . $ecs->table('order_info') . " WHERE user_id = '$user_id'" . GZ_order_query_sql($type));
-$orderids = array();
-foreach ($records as $orderRecords)
+if ($type == 'await_comment')
 {
-    $orderIds[] = $orderRecords['order_id'];
+    $orders = GZ_get_user_all_orders($user_id);
+    foreach ($orders as $key => $value)
+    {
+        unset($orders[$key]['order_status']);
+        $orders[$key]['order_time'] = formatTime($value['order_time']);
+        $goods_list = GZ_order_goods($value['order_id']);
+        $goods_commented = GZ_order_commented_goods($value['order_id'], $user_id);
+        //$orders[$key]['ss'] = $goods_list;
+        $goods_list_t = array();
+        // $goods_list = API_DATA("SIMPLEGOODS", $goods_list);
+        foreach ($goods_list as $v)
+        {
+            if (in_array($v['goods_id'], $goods_commented))
+                continue;
+            $goods_list_t[] = array(
+                "goods_id" => $v['goods_id'],
+                "name" => $v['goods_name'],
+                "goods_number" => $v['goods_number'],
+                "subtotal" => price_format($v['subtotal'], false),
+                "formated_shop_price" => price_format($v['goods_price'], false),
+                "img" => array(
+                    'small' => API_DATA('PHOTO', $v['goods_thumb']),
+                    'thumb' => API_DATA('PHOTO', $v['goods_img']),
+                    'url' => API_DATA('PHOTO', $v['original_img'])
+                )
+            );
+        }
+
+        if (!$goods_list_t)
+        {
+            unset($orders[$key]);
+            continue;
+        }
+        $orders[$key]['goods_list'] = $goods_list_t;
+        $order_detail = get_order_detail($value['order_id'], $user_id);
+        $orders[$key]['formated_integral_money'] = $order_detail['formated_integral_money']; //积分 钱
+        $orders[$key]['formated_bonus'] = $order_detail['formated_bonus']; //红包 钱
+        $orders[$key]['formated_shipping_fee'] = $order_detail['formated_shipping_fee']; //运送费
+
+        if ($order_detail['pay_id'] > 0)
+        {
+            $payment = payment_info($order_detail['pay_id']);
+        }
+
+
+        $subject = $orders[$key]['goods_list'][0]['name'] . '等' . count($orders[$key]['goods_list']) . '种商品';
+
+        $orders[$key]['order_info'] = array(
+            'pay_code' => $payment['pay_code'],
+            'order_amount' => $order_detail['order_amount'],
+            'order_id' => $order_detail['order_id'],
+            'subject' => $subject,
+            'desc' => $subject,
+            'order_sn' => $order_detail['order_sn']
+        );
+    }
+
+    //page
+    $sortOrder = array();
+    foreach ($orders as $order)
+    {
+        $sortOrder[] = $order;
+    }
+    $record_count = count($sortOrder);
+    $pager = get_pager('user.php', array('act' => $action), $record_count, $page, $page_parm['count']);
+    $sortOrder = array_slice($sortOrder, $pager['start'], $pager['size']);
+    $pagero = array(
+        "total" => $pager['record_count'],
+        "count" => count($sortOrder),
+        "more" => empty($pager['page_next']) ? 0 : 1
+    );
+    GZ_Api::outPut($sortOrder, $pagero);
 }
-$orderIds = array_diff($orderIds, $commentedOrderIds);
-$record_count = count($orderIds);
+
+
+$records = $db->getAll("SELECT order_id FROM " . $ecs->table('order_info') . " WHERE user_id = '$user_id'" . GZ_order_query_sql($type));
+$record_count = count($records);
 
 // $order_all = $db->getAll("SELECT * FROM ".$ecs->table('order_info')." WHERE user_id='$user_id'");
 // foreach ($order_all[0] as $key => $val) {
@@ -69,7 +139,7 @@ $record_count = count($orderIds);
 // $sql = "SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql($type);
 //  print_r($sql);exit;
 $pager  = get_pager('user.php', array('act' => $action), $record_count, $page, $page_parm['count']);
-$orders = GZ_get_user_orders($user_id, $pager['size'], $pager['start'], $type, $commentedOrderIds);
+$orders = GZ_get_user_orders($user_id, $pager['size'], $pager['start'], $type);
 // print_r($orders);exit;
 foreach ($orders as $key => $value) {
 	unset($orders[$key]['order_status']);
@@ -138,16 +208,15 @@ GZ_Api::outPut($orders, $pagero);
  * @param   int         $start          列表起始位置
  * @return  array       $order_list     订单列表
  */
-function GZ_get_user_orders($user_id, $num = 10, $start = 0, $type = 'await_pay', $commentedOrderIds = array())
+function GZ_get_user_orders($user_id, $num = 10, $start = 0, $type = 'await_pay')
 {
     /* 取得订单列表 */
     $arr    = array();
 
-    $filterCommentSql = $commentedOrderIds ? ' AND order_id NOT IN ' . '(' . implode(',', $commentedOrderIds) . ') ' : '';
     $sql = "SELECT order_id, order_sn, order_status, shipping_status, pay_status, add_time, " .
            "(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - discount) AS total_fee ".
            " FROM " .$GLOBALS['ecs']->table('order_info') .
-           " WHERE user_id = '$user_id' " . GZ_order_query_sql($type) . $filterCommentSql . " ORDER BY add_time DESC";
+           " WHERE user_id = '$user_id' " . GZ_order_query_sql($type) . " ORDER BY add_time DESC";
     // print_r($sql);exit;
     $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
     while ($row = $GLOBALS['db']->fetchRow($res))
@@ -211,3 +280,46 @@ where o.user_id = " . $user_id . " AND o.`shipping_status`=2 AND c.user_id = " .
     }
     return $orderIds;
 }
+
+function GZ_get_user_all_orders($user_id)
+{
+    /* 取得订单列表 */
+    $arr = array();
+
+    $sql = "SELECT order_id, order_sn, order_status, shipping_status, pay_status, add_time, " .
+            "(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - discount) AS total_fee " .
+            " FROM " . $GLOBALS['ecs']->table('order_info') .
+            " WHERE user_id = '$user_id' ORDER BY add_time DESC";
+    // print_r($sql);exit;
+    $res = $GLOBALS['db']->query($sql);
+    while ($row = $GLOBALS['db']->fetchRow($res))
+    {
+
+        $row['shipping_status'] = ($row['shipping_status'] == SS_SHIPPED_ING) ? SS_PREPARING : $row['shipping_status'];
+        $row['order_status'] = $GLOBALS['_LANG']['os'][$row['order_status']] . ',' . $GLOBALS['_LANG']['ps'][$row['pay_status']] . ',' . $GLOBALS['_LANG']['ss'][$row['shipping_status']];
+
+        $arr[] = array('order_id' => $row['order_id'],
+            'order_sn' => $row['order_sn'],
+            'order_time' => local_date($GLOBALS['_CFG']['time_format'], $row['add_time']),
+            'order_status' => $row['order_status'],
+            'total_fee' => price_format($row['total_fee'], false));
+    }
+
+    return $arr;
+}
+
+function GZ_order_commented_goods($order_id, $user_id)
+{
+    $sql = "SELECT og.goods_id FROM " . $GLOBALS['ecs']->table('order_goods') . " AS og 
+                LEFT JOIN " . $GLOBALS['ecs']->table('comment') . " AS c ON og.goods_id = c.id_value and c.comment_type = 0 
+                WHERE og.order_id = '$order_id' and c.user_id = '$user_id'";
+
+    $res = $GLOBALS['db']->query($sql);
+    $goods_list = array();
+    while ($row = $GLOBALS['db']->fetchRow($res))
+    {
+        $goods_list[] = $row['goods_id'];
+    }
+    return $goods_list;
+}
+
