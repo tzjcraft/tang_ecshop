@@ -1713,7 +1713,14 @@ elseif ($_REQUEST['step'] == 'done')
         $msg = $order['pay_status'] == PS_UNPAYED ?
             $_LANG['order_placed_sms'] : $_LANG['order_placed_sms'] . '[' . $_LANG['sms_paid'] . ']';
         $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
-        $sms->send($consignee['mobile'],'订单号: ' . $order['order_sn']);
+        $shippingAddress = get_region_by_id($order['country']) . ' ' . get_region_by_id($order['province']) . ' ' . get_region_by_id($order['city']);
+        $sms_goods_list = '';
+        foreach ($cart_goods as $sms_goods)
+        {
+            $sms_goods_list[] = $sms_goods['goods_name'];
+        }
+        $sms->send($consignee['mobile'],
+                '您订购的: ' . implode(', ', $sms_goods_list) . '. 订单号: ' . $order['order_sn'] . '. 取货地址: ' . $shippingAddress);
     }
 
     /* 如果订单金额为0 处理虚拟卡 */
@@ -2774,4 +2781,20 @@ function cart_favourable_amount($favourable)
     /* 优惠范围内的商品总额 */
     return $GLOBALS['db']->getOne($sql);
 }
+
+/**
+ * 获得指定国家的所有省份
+ *
+ * @access      public
+ * @param       int     country    国家的编号
+ * @return      array
+ */
+function get_region_by_id($id)
+{
+    $sql = 'SELECT region_name FROM ' . $GLOBALS['ecs']->table('region') .
+            " WHERE region_id = '$id'";
+
+    return $GLOBALS['db']->getOne($sql);
+}
+
 ?>
