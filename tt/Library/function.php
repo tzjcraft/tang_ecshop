@@ -478,7 +478,7 @@ function get_nopaycomment($user_id)
         $commented[] = $row['goods_id'];
     }
 
-    $sql = 'select DISTINCT g.goods_id FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS o JOIN ' . $GLOBALS['ecs']->table('order_goods') . ' AS g on o.order_id = g.order_id';
+    $sql = 'select DISTINCT g.goods_id FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS o JOIN ' . $GLOBALS['ecs']->table('order_goods') . ' AS g on o.order_id = g.order_id WHERE o.user_id = ' . $user_id;
     $res = $GLOBALS['db']->query($sql);
     $userGoods = array();
     while ($row = $GLOBALS['db']->fetchRow($res))
