@@ -994,8 +994,8 @@ switch ($tmp[0]) {
 	    unset($_SESSION['direct_shopping']);
         $subject = $cart_goods[0]['goods_name'].'等'.count($cart_goods).'种商品';
 		// print_r($smarty->_var['order']['order_sn']);
-		$out = array('order_sn'=>$smarty->_var['order']['order_sn'], 'order_id'=>$order['order_id'], 'order_info' => array(
-            'pay_code' => $payment['pay_code'],
+		$out = array('order_sn' => $smarty->_var['order']['order_sn'], 'log_id' => $order['log_id'], 'order_id' => $order['order_id'], 'order_info' => array(
+                'pay_code' => $payment['pay_code'],
             'order_amount' => $order['order_amount'],
             'order_id' => $order['order_id'],
             'subject' => $subject,
