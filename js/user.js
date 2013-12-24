@@ -396,8 +396,9 @@ function checkEmail(email)
   
   if (email == '')
   {
-    document.getElementById('email_notice').innerHTML = msg_email_blank;
-    submit_disabled = true;
+//    document.getElementById('email_notice').innerHTML = msg_email_blank;
+//    submit_disabled = true;
+        document.getElementById('email_notice').innerHTML = '';
   }
   else if (!Utils.isEmail(email))
   {
@@ -409,8 +410,10 @@ function checkEmail(email)
   {
     document.forms['formUser'].elements['Submit'].disabled = 'disabled';
     return false;
-  }
-  Ajax.call( 'user.php?act=check_email', 'email=' + email, check_email_callback , 'GET', 'TEXT', true, true );
+    }
+    if (email != '') {
+        Ajax.call('user.php?act=check_email', 'email=' + email, check_email_callback, 'GET', 'TEXT', true, true);
+    }
 }
 
 function check_email_callback(result)
@@ -463,17 +466,21 @@ function register()
     //msg += username_shorter + '\n';
   }
 
-  if (email.length == 0)
-  {
-    msg += email_empty + '\n';
-  }
-  else
-  {
-    if ( ! (Utils.isEmail(email)))
+//  if (email.length == 0)
+//  {
+//    msg += email_empty + '\n';
+//  }
+//  else
+//  {
+//    if ( ! (Utils.isEmail(email)))
+//    {
+//      msg += email_invalid + '\n';
+//    }
+//  }
+    if (email.length > 0 && !(Utils.isEmail(email)))
     {
       msg += email_invalid + '\n';
     }
-  }
   if (password.length == 0)
   {
     msg += password_empty + '\n';
