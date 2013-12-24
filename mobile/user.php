@@ -456,7 +456,7 @@ elseif ($act == 'send_sms_captcha')
 elseif ($act == 'reset_password_by_captcha')
 {
     $newpass = trim($_POST['new_password']);
-    $confirmPass = trim($_POST['new_password']);
+    $confirmPass = trim($_POST['confirm_password']);
     $user_id = $_SESSION['forget_passwod_uid'];
 
     if (strlen($newpass) < 6)
@@ -472,7 +472,7 @@ elseif ($act == 'reset_password_by_captcha')
 
             if ($user->edit_user(array('username' => $user_info['user_name'], 'password' => $newpass)))
             {
-                $sql = "UPDATE " . $ecs->table('users') . "SET `ec_salt`='0' WHERE user_id= '" . $uid . "'";
+                $sql = "UPDATE " . $ecs->table('users') . "SET `ec_salt`='0' WHERE user_id= '" . $user_id . "'";
                 $db->query($sql);
                 $user->logout();
                 $message = '您的新密码已设置成功！';
@@ -480,12 +480,12 @@ elseif ($act == 'reset_password_by_captcha')
             }
             else
             {
-                $message = '您输入的原密码不正确！';
+                $message = '您输入的密码不匹配！';
             }
         }
         else
         {
-            $message = '您输入的原密码不正确！';
+            $message = '您输入的密码不匹配！';
         }
     }
     $smarty->assign('action', 'reset_password_by_captcha');
