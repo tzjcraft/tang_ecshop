@@ -71,8 +71,8 @@ class sms
     var $errors  = array('api_errors'       => array('error_no' => -1, 'error_msg' => ''),
                          'server_errors'    => array('error_no' => -1, 'error_msg' => ''));
 
-    protected $userId = 'JC2077';
-    protected $password = '526098';
+    protected $userId = 'J00792';
+    protected $password = '003652';
 
     /**
      * 构造函数
