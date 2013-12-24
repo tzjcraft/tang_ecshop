@@ -439,7 +439,7 @@
           </table>
     </div>
     <!--{if $total.real_goods_count neq 0}-->
-        <input name = "shipping" type="radio" value = "8" checked="checked"  style="display:none"/>
+        <input name = "shipping" type="hidden" value = "8" />
         <!--{/if}-->
     <!--{if $is_exchange_goods neq 1 || $total.real_goods_count neq 0}-->
     <div class="flowBox">
