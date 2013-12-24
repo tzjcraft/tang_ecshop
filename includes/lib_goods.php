@@ -324,7 +324,8 @@ function get_recommend_goods($type = '', $cats = '')
             $goods[$idx]['shop_price']   = price_format($row['shop_price']);
             $goods[$idx]['thumb']        = get_image_path($row['goods_id'], $row['goods_thumb'], true);
             $goods[$idx]['goods_img']    = get_image_path($row['goods_id'], $row['goods_img']);
-            $goods[$idx]['url']          = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
+            $goods[$idx]['url'] = build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']);
+            $goods[$idx]['buy_num'] = get_buy_sum($row['goods_id']);
             if (in_array($row['goods_id'], $type_array['best']))
             {
                 $type_goods['best'][] = $goods[$idx];
@@ -1503,4 +1504,11 @@ function get_products_info($goods_id, $spec_goods_attr_id)
     }
     return $return_array;
 }
+
+function get_buy_sum($goods_id)
+{
+    $sql = "SELECT SUM(goods_number) from " . $GLOBALS['ecs']->table('order_goods') . " AS g ," . $GLOBALS['ecs']->table('order_info') . " AS o WHERE o.order_id=g.order_id and g.goods_id = " . $goods_id . "  and o.order_status=1 "; //o.order_status=1 表示确认了的订单才算
+    return $GLOBALS['db']->getOne($sql);
+}
+
 ?>
