@@ -295,7 +295,7 @@ function GZ_get_user_all_orders($user_id)
     $sql = "SELECT order_id, order_sn, order_status, shipping_status, pay_status, add_time, " .
             "(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - discount) AS total_fee " .
             " FROM " . $GLOBALS['ecs']->table('order_info') .
-            " WHERE user_id = '$user_id' ORDER BY add_time DESC";
+            " WHERE user_id = '$user_id' AND shipping_status = '2' ORDER BY add_time DESC";
     // print_r($sql);exit;
     $res = $GLOBALS['db']->query($sql);
     while ($row = $GLOBALS['db']->fetchRow($res))
