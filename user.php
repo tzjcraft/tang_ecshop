@@ -30,12 +30,12 @@ $back_act='';
 
 // 不需要登录的操作或自己验证是否登录（如ajax处理）的act
 $not_login_arr =
-        array('login', 'act_login', 'register', 'act_register', 'act_edit_password', 'get_password', 'send_pwd_email', 'password', 'signin', 'add_tag', 'collect', 'return_to_cart', 'logout', 'email_list', 'validate_email', 'send_hash_mail', 'order_query', 'is_registered', 'check_email', 'clear_history', 'qpassword_name', 'get_passwd_question', 'check_answer', 'sms_captcha');
+        array('login', 'act_login', 'register', 'act_register', 'act_edit_password', 'get_password', 'send_pwd_email', 'password', 'signin', 'add_tag', 'collect', 'return_to_cart', 'logout', 'email_list', 'validate_email', 'send_hash_mail', 'order_query', 'is_registered', 'check_email', 'clear_history', 'qpassword_name', 'get_passwd_question', 'check_answer', 'sms_captcha', 'validate_user', 'send_sms_captcha', 'reset_password_by_captcha');
 
 /* 显示页面的action列表 */
 $ui_arr = array('register', 'login', 'profile', 'order_list', 'order_detail', 'address_list', 'collection_list',
 'message_list', 'tag_list', 'get_password', 'reset_password', 'booking_list', 'add_booking', 'account_raply',
-'account_deposit', 'account_log', 'account_detail', 'act_account', 'pay', 'default', 'bonus', 'group_buy', 'group_buy_detail', 'affiliate', 'comment_list','validate_email','track_packages', 'transform_points','qpassword_name', 'get_passwd_question', 'check_answer');
+'account_deposit', 'account_log', 'account_detail', 'act_account', 'pay', 'default', 'bonus', 'group_buy', 'group_buy_detail', 'affiliate', 'comment_list', 'validate_email', 'track_packages', 'transform_points', 'qpassword_name', 'get_passwd_question', 'check_answer', 'validate_user', 'send_sms_captcha', 'reset_password_by_captcha');
 
 /* 未登录处理 */
 if (empty($_SESSION['user_id']))
@@ -596,33 +596,126 @@ elseif ($action == 'act_edit_profile')
 /* 密码找回-->修改密码界面 */
 elseif ($action == 'get_password')
 {
-    include_once(ROOT_PATH . 'includes/lib_passport.php');
-
-    if (isset($_GET['code']) && isset($_GET['uid'])) //从邮件处获得的act
+    //显示用户名和email表单
+    $message = '';
+    $smarty->assign('message', $message);
+    $smarty->display('user_passport.dwt');
+}
+elseif ($action == 'validate_user')
+{
+    $username = trim($_POST['user_name']);
+    $mobile = trim($_POST['mobile']);
+    $sql = "SELECT * FROM " . $GLOBALS['ecs']->table('users') . "WHERE user_name = '" . $username . "'";
+    $user_info = $GLOBALS['db']->getRow($sql, true);
+    if (!$user_info || $mobile != $user_info['mobile_phone'])
     {
-        $code = trim($_GET['code']);
-        $uid  = intval($_GET['uid']);
-
-        /* 判断链接的合法性 */
-        $user_info = $user->get_profile_by_id($uid);
-        if (empty($user_info) || ($user_info && md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']) != $code))
-        {
-            show_message($_LANG['parm_error'], $_LANG['back_home_lnk'], './', 'info');
-        }
-
-        $smarty->assign('uid',    $uid);
-        $smarty->assign('code',   $code);
-        $smarty->assign('action', 'reset_password');
+        $message = '用户名不存在或与手机号码不匹配';
+        $smarty->assign('action', 'get_password');
+        $smarty->assign('message', $message);
         $smarty->display('user_passport.dwt');
     }
     else
     {
-        //显示用户名和email表单
+        error_reporting(0);
+        require(ROOT_PATH . '/includes/cls_captcha.php');
+        $img = new captcha(ROOT_PATH . 'data/captcha/', $_CFG['captcha_width'], $_CFG['captcha_height']);
+        $captcha = $img->generateCaptchaString();
+        $message = $captcha;
+
+        include_once(ROOT_PATH . '/includes/cls_sms.php');
+        $sms = new sms();
+        $sms->send($mobile, $message);
+        $_SESSION['forget_passwod_uid'] = $user_info['user_id'];
+        $smarty->assign('action', 'validate_user');
         $smarty->display('user_passport.dwt');
     }
 }
+elseif ($action == 'send_sms_captcha')
+{
+    include_once(ROOT_PATH . '/includes/lib_passport.php');
+    $captcha = trim($_POST['captcha']);
+    if (!$captcha || strtoupper($captcha) != $_SESSION['sms_captcha'])
+    {
+        $message = '验证码错误';
+        $smarty->assign('action', 'validate_user');
+        $smarty->assign('message', $message);
+        $smarty->display('user_passport.dwt');
+    }
+    else
+    {
+        $message = '';
+        $smarty->assign('action', 'send_sms_captcha');
+        $smarty->assign('message', $message);
+        $smarty->display('user_passport.dwt');
+    }
+}
+elseif ($action == 'reset_password_by_captcha')
+{
+    $newpass = trim($_POST['new_password']);
+    $confirmPass = trim($_POST['confirm_password']);
+    $user_id = $_SESSION['forget_passwod_uid'];
 
-/* 密码找回-->输入用户名界面 */
+    if (strlen($newpass) < 6)
+    {
+        $message = '登录密码不能少于 6 个字符。';
+    }
+    else
+    {
+
+        $user_info = $user->get_profile_by_id($user_id); //论坛记录
+        if ($user_info && $newpass && $newpass == $confirmPass)
+        {
+
+            if ($user->edit_user(array('username' => $user_info['user_name'], 'password' => $newpass)))
+            {
+                $sql = "UPDATE " . $ecs->table('users') . "SET `ec_salt`='0' WHERE user_id= '" . $user_id . "'";
+                $db->query($sql);
+                $user->logout();
+                $message = '您的新密码已设置成功！';
+                show_message($_LANG['edit_password_success'], $_LANG['relogin_lnk'], 'user.php?act=login', 'info');
+            }
+            else
+            {
+                $message = '您输入的密码不匹配！';
+            }
+        }
+        else
+        {
+            $message = '您输入的密码不匹配！';
+        }
+    }
+    $smarty->assign('action', 'send_sms_captcha');
+    $smarty->assign('message', $message);
+    $smarty->display('user_passport.dwt');
+}
+//elseif ($action == 'get_password')
+//{
+//    include_once(ROOT_PATH . 'includes/lib_passport.php');
+//
+//    if (isset($_GET['code']) && isset($_GET['uid'])) //从邮件处获得的act
+                //    {
+//        $code = trim($_GET['code']);
+//        $uid = intval($_GET['uid']);
+//
+//        /* 判断链接的合法性 */
+//        $user_info = $user->get_profile_by_id($uid);
+//        if (empty($user_info) || ($user_info && md5($user_info['user_id'] . $_CFG['hash_code'] . $user_info['reg_time']) != $code))
+//        {
+//            show_message($_LANG['parm_error'], $_LANG['back_home_lnk'], './', 'info');
+//        }
+//
+//        $smarty->assign('uid', $uid);
+//        $smarty->assign('code', $code);
+//        $smarty->assign('action', 'reset_password');
+//        $smarty->display('user_passport.dwt');
+//    }
+//    else
+//    {
+//        //显示用户名和email表单
+//        $smarty->display('user_passport.dwt');
+//    }
+//}
+                /* 密码找回-->输入用户名界面 */
 elseif ($action == 'qpassword_name')
 {
     //显示输入要找回密码的账号表单
