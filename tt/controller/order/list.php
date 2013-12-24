@@ -224,12 +224,18 @@ function GZ_get_user_orders($user_id, $num = 10, $start = 0, $type = 'await_pay'
 
         $row['shipping_status'] = ($row['shipping_status'] == SS_SHIPPED_ING) ? SS_PREPARING : $row['shipping_status'];
         $row['order_status'] = $GLOBALS['_LANG']['os'][$row['order_status']] . ',' . $GLOBALS['_LANG']['ps'][$row['pay_status']] . ',' . $GLOBALS['_LANG']['ss'][$row['shipping_status']];
-
-        $arr[] = array('order_id'       => $row['order_id'],
-                       'order_sn'       => $row['order_sn'],
-                       'order_time'     => local_date($GLOBALS['_CFG']['time_format'], $row['add_time']),
+        $log_id = get_paylog_id($row['order_id'], PAY_ORDER);
+        $result = array('order_id' => $row['order_id'],
+            'order_sn' => $row['order_sn'],
+            'log_id' => $log_id,
+            'order_time'     => local_date($GLOBALS['_CFG']['time_format'], $row['add_time']),
                        'order_status'   => $row['order_status'],
-                       'total_fee'      => price_format($row['total_fee'], false));
+                       'total_fee' => price_format($row['total_fee'], false));
+        if ($type != 'await_pay')
+        {
+            unset($result['log_id']);
+        }
+        $arr[] = $result;
     }
 
     return $arr;
