@@ -166,7 +166,7 @@
           <td align="right" <!-- {if $field.is_need} -->id="extend_field{$field.id}i"<!--{/if}-->>{$field.reg_field_name}
           <td>
           <input name="extend_field{$field.id}" type="text" size="25" class="inputBg" /><!-- {if $field.is_need} --><span style="color:#FF0000"> *</span><!-- {/if} -->
-<!-- {if $field.id eq 5} --><!-- 判断是否启用验证码{if $enabled_captcha} --><input class="button" type="button" onclick="return smsCaptcha(this)" value=" 发送短信验证码 "><!--{/if}--><!--{/if}-->
+<!-- {if $field.id eq 5} --><!-- 判断是否启用验证码{if $enabled_captcha} --><input class="button" id="sendSmsCaptcha" type="button" onclick="return smsCaptcha(this)" value=" 获取验证码 "><!--{/if}--><!--{/if}-->
           </td>
         </tr>
 	<!-- {/if} -->

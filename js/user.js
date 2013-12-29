@@ -872,9 +872,23 @@ function calResult()
   }
 }
 
-function smsCaptcha(obj)
+var wait_captcha = 60;
+function smsCaptcha()
 {
-    var frm = document.forms['formUser'];
-    var mobile = frm.elements['extend_field5'].value;
-    Ajax.call('user.php?act=sms_captcha', 'mobile_phone=' + mobile, '', 'POST', 'JSON');
+    if (wait_captcha == 60) {
+        var frm = document.forms['formUser'];
+        var mobile = frm.elements['extend_field5'].value;
+        Ajax.call('user.php?act=sms_captcha', 'mobile_phone=' + mobile, '', 'POST', 'JSON');
+    }
+    var sendButton = document.getElementById("sendSmsCaptcha");//.disabled = false;
+    if (wait_captcha == 0) {
+        sendButton.disabled = false;
+        sendButton.value = "获取验证码";
+        wait_captcha = 60;
+    } else {
+        sendButton.setAttribute("disabled", true);
+        sendButton.value = "重新发送(" + wait_captcha + ")";
+        wait_captcha--;
+        setTimeout('smsCaptcha()', 1000);
+    }
 }
