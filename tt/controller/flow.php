@@ -843,7 +843,12 @@ switch ($tmp[0]) {
 	            " FROM " .$ecs->table('cart') .
 	            " WHERE session_id = '".SESS_ID."' AND rec_type = '$flow_type'";
 	    $db->query($sql);
-	    /* 修改拍卖活动状态 */
+        /* 插入商品表的salesnum 字段，统计销量排行 */
+        $sql = "update " . $ecs->table('goods') . " AS a, " . $ecs->table('cart') . " AS b " .
+                " set a.sales_num= a.sales_num+ b.goods_number" .
+                " WHERE a.goods_id=b.goods_id AND b.session_id = '" . SESS_ID . "' AND b.rec_type = '$flow_type'";
+        $db->query($sql);
+        /* 修改拍卖活动状态 */
 	    if ($order['extension_code']=='auction')
 	    {
 	        $sql = "UPDATE ". $ecs->table('goods_activity') ." SET is_finished='2' WHERE act_id=".$order['extension_id'];
@@ -901,9 +906,9 @@ switch ($tmp[0]) {
             }
             $sms->send($consignee['mobile'],
                     '您订购的: ' . implode(', ', $sms_goods_list) . '. 订单号: ' . $order['order_sn'] . '. 取货地址: ' . $shippingAddress);
-        }
+            }
 
-	    /* 如果订单金额为0 处理虚拟卡 */
+        /* 如果订单金额为0 处理虚拟卡 */
 	    if ($order['order_amount'] <= 0)
 	    {
 	        $sql = "SELECT goods_id, goods_name, goods_number AS num FROM ".
