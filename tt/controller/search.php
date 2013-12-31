@@ -345,7 +345,7 @@ $max_page = ($count> 0) ? ceil($count / $size) : 1;
         "WHERE g.is_delete = 0 AND g.is_on_sale = 1 AND g.is_alone_sale = 1 $attr_in ".
               "AND (( 1 " . $categories . $keywords . $brand . $min_price . $max_price . $intro . $outstock . " ) " . $tag_where . " ) " . $filter_is_promote .
         "GROUP BY g.goods_id " .
-        "ORDER BY $sort $order";
+        "ORDER BY $sort $order" . " ,comments_num DESC";
 $res = $db->SelectLimit($sql, $size, ($page - 1) * $size);
 
 $arr = array();
