@@ -893,20 +893,27 @@ switch ($tmp[0]) {
 	    /* 如果需要，发短信 */
 	    if ($_CFG['sms_order_placed'] == '1' && $_CFG['sms_shop_mobile'] != '')
 	    {
-	        include_once('includes/cls_sms.php');
-	        $sms = new sms();
-	        $msg = $order['pay_status'] == PS_UNPAYED ?
-	            $_LANG['order_placed_sms'] : $_LANG['order_placed_sms'] . '[' . $_LANG['sms_paid'] . ']';
-	        $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
-            $shippingAddress = get_region_by_id($order['country']) . ' ' . get_region_by_id($order['province']) . ' ' . get_region_by_id($order['city']);
-            $sms_goods_list = '';
-            foreach ($cart_goods as $sms_goods)
-            {
-                $sms_goods_list[] = $sms_goods['goods_name'];
+                include_once(EC_PATH . '/includes/cls_sms.php');
+            $sms = new sms();
+            $msg = $order['pay_status'] == PS_UNPAYED ?
+                    $_LANG['order_placed_sms'] : $_LANG['order_placed_sms'] . '[' . $_LANG['sms_paid'] . ']';
+            $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
             }
-            $sms->send($consignee['mobile'],
-                    '您订购的: ' . implode(', ', $sms_goods_list) . '. 订单号: ' . $order['order_sn'] . '. 取货地址: ' . $shippingAddress);
-            }
+
+        /* 给顾客发送短信 *///TODO: Zugor 添加配置shop_config 以便后台可以控制
+        include_once(EC_PATH . '/includes/cls_sms.php');
+        $shippingAddress = get_region_by_id($order['country']) . ' ' . get_region_by_id($order['province']) . ' ' . get_region_by_id($order['city']);
+        $sms_goods_list = '';
+        foreach ($cart_goods as $sms_goods)
+        {
+            $sms_goods_list[] = $sms_goods['goods_name'];
+        }
+        $sms_content = '您订购的: ' . implode(', ', $sms_goods_list) . '. 订单号: ' . $order['order_sn'] . '. 取货地址: ' . $shippingAddress;
+        if ($order['assign_shipping_time'])
+        {
+            $sms_content .= '. 取货时间: ' . date('Y-m-d H:i', strtotime($order['assign_shipping_time']));
+        }
+        $sms->send($consignee['mobile'], $sms_content);
 
         /* 如果订单金额为0 处理虚拟卡 */
 	    if ($order['order_amount'] <= 0)
