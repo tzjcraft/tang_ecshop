@@ -34,7 +34,7 @@ abstract class GZ_Api
     protected static $error = array(
         6   => '密码错误',
 		8 	=>	'处理失败',
-		11  => '用户名或email已使用',
+		11  => '用户名已使用',
 		13  => '不存在的信息',
 		14	=>	'购买失败',
         100 => 'Invalid session',
