@@ -154,6 +154,7 @@ class sms
         $curlPost = 'userId=' . $this->userId . '&password=' . $this->password . '&pszMobis=' . $phones . '&pszMsg=' . $msg . '&iMobiCount=' . $iMobiCount . '&pszSubPort=' . $pszSubPort;
 
         $ch = curl_init();
+        curl_setopt($ch, CURLOPT_TIMEOUT, 25); //time out
         curl_setopt($ch, CURLOPT_URL, $sms_url);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
