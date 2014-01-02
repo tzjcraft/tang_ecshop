@@ -902,6 +902,7 @@ switch ($tmp[0]) {
 
         /* 给顾客发送短信 *///TODO: Zugor 添加配置shop_config 以便后台可以控制
         include_once(EC_PATH . '/includes/cls_sms.php');
+        $sms = new sms();
         $shippingAddress = get_region_by_id($order['country']) . ' ' . get_region_by_id($order['province']) . ' ' . get_region_by_id($order['city']);
         $sms_goods_list = '';
         foreach ($cart_goods as $sms_goods)
