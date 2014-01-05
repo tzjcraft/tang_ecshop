@@ -168,6 +168,10 @@
          <!-- {/if} -->
          <!--#我的留言 end-->
          <!-- *我的评论 start-->
+<!--{if $uncommented}-->
+        <h5><span>您有 <font class="f4">{$uncommented}</font> 个待评价的商品</span></h5>
+        <div class="blank"></div>
+<!--{/if}-->
           <!-- {if $action eq 'comment_list'} -->
           <h5><span>{$lang.label_comment}</span></h5>
           <div class="blank"></div>

@@ -1223,6 +1223,8 @@ elseif ($action == 'comment_list')
 
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 
+    /* 获取待评价的商品数量 */
+    $uncommentedGoods = get_nopaycomment($user_id);
     /* 获取用户留言的数量 */
     $sql = "SELECT COUNT(*) FROM " .$ecs->table('comment').
            " WHERE parent_id = 0 AND user_id = '$user_id'";
@@ -1230,7 +1232,8 @@ elseif ($action == 'comment_list')
     $pager = get_pager('user.php', array('act' => $action), $record_count, $page, 5);
 
     $smarty->assign('comment_list', get_comment_list($user_id, $pager['size'], $pager['start']));
-    $smarty->assign('pager',        $pager);
+    $smarty->assign('pager', $pager);
+    $smarty->assign('uncommented', $uncommentedGoods);
     $smarty->display('user_clips.dwt');
 }
 
