@@ -205,7 +205,7 @@ $_LANG['action_note'] = '备注';
 $_LANG['pay_note'] = '支付备注：';
 
 $_LANG['sms_time_format'] = 'm月j日G时';
-$_LANG['order_shipped_sms'] = '您的订单%s已于%s发货 [%s]';
+$_LANG['order_shipped_sms'] = '您的订单%s已于%s取货 [%s]';
 $_LANG['order_splited_sms'] = '您的订单%s,%s正在%s [%s]';
 $_LANG['order_removed'] = '订单删除成功。';
 $_LANG['return_list'] = '返回订单列表';
