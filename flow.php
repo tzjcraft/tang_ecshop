@@ -482,6 +482,8 @@ elseif ($_REQUEST['step'] == 'checkout')
 
     $_SESSION['flow_consignee'] = $consignee;
     $smarty->assign('consignee', $consignee);
+    $consigneeCountry = get_region_by_id($consignee['country']) . ' ' . get_region_by_id($consignee['province']) . ' ' . get_region_by_id($consignee['city']);
+    $smarty->assign('consigneeCountry', $consigneeCountry);
 
     /* 对商品信息赋值 */
     $cart_goods = cart_goods($flow_type); // 取得商品列表，计算合计
