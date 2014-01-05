@@ -588,7 +588,7 @@ function update_address($address)
         $address_id = $GLOBALS['db']->insert_id();
     }
 
-    if (isset($address['defalut']) && $address['default'] > 0 && isset($address['user_id']))
+    if (isset($address['default']) && $address['default'] > 0 && isset($address['user_id']))
     {
         $sql = "UPDATE ".$GLOBALS['ecs']->table('users') .
                 " SET address_id = '".$address_id."' ".

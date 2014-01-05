@@ -1087,8 +1087,9 @@ elseif ($action == 'act_edit_address')
         'mobile'     => isset($_POST['mobile'])    ? compile_str(make_semiangle(trim($_POST['mobile']))) : '',
         'best_time'  => isset($_POST['best_time']) ? compile_str(trim($_POST['best_time']))  : '',
         'sign_building' => isset($_POST['sign_building']) ? compile_str(trim($_POST['sign_building'])) : '',
-        'zipcode'       => isset($_POST['zipcode'])       ? compile_str(make_semiangle(trim($_POST['zipcode']))) : '',
-        );
+        'zipcode' => isset($_POST['zipcode']) ? compile_str(make_semiangle(trim($_POST['zipcode']))) : '',
+        'default' => isset($_POST['defaultAddress']) && $_POST['defaultAddress'] ? 1 : 0
+    );
 
     if (update_address($address))
     {
