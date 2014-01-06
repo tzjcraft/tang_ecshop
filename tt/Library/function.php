@@ -39,9 +39,9 @@ function GZ_user_info($user_id)
 	$shipped = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('shipped'));
 	$finished = $db->getOne("SELECT COUNT(*) FROM " .$ecs->table('order_info'). " WHERE user_id = '$user_id'". GZ_order_query_sql('finished'));
 	$bouns = get_user_available_bouns_list($user_id);
-       $await_comment = get_nopaycomment($user_id);
-
     include_once(ROOT_PATH . 'includes/lib_clips.php');
+    $await_comment = get_nopaycomment($user_id);
+
     $surplus_amount = get_user_surplus($user_id);
     // $rank = get_rank_info();
 	// print_r($rank);exit;
