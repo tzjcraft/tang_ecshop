@@ -34,9 +34,9 @@ include_once(EC_PATH . '/includes/lib_goods.php');
 $commentArray = $_POST;
 $content = isset($commentArray['content']) ? $commentArray['content'] : null;
 $goods_id = isset($commentArray['goods_id']) ? $commentArray['goods_id'] : null;
-
+$rating = isset($commentArray['rating']) ? $commentArray['rating'] : null;
 GZ_Api::authSession();
-$result = add_comment_by_api($content, $goods_id);
+$result = add_comment_by_api($goods_id, $content, $rating);
 
 if ($result)
 {
@@ -57,7 +57,7 @@ else
  * @param   object  $cmt
  * @return  void
  */
-function add_comment_by_api($content, $goods_id)
+function add_comment_by_api($goods_id, $content, $rating = 5)
 {
     /* 评论是否需要审核 */
     $status = 1 - $GLOBALS['_CFG']['comment_check'];
@@ -66,6 +66,11 @@ function add_comment_by_api($content, $goods_id)
 
     $userInfo = user_info($user_id);
     $goodsInfo = goods_info($goods_id);
+
+    if (!is_numeric($rating))
+    {
+        $rating = 5;
+    }
     if (!$content || !$goodsInfo || !$userInfo)
     {
         GZ_Api::outPut(101);
@@ -77,7 +82,7 @@ function add_comment_by_api($content, $goods_id)
     /* 保存评论内容 */
     $sql = "INSERT INTO " . $GLOBALS['ecs']->table('comment') .
             "(comment_type, id_value, email, user_name, content, comment_rank, add_time, ip_address, status, parent_id, user_id) VALUES " .
-            "('0', '" . $goodsInfo['goods_id'] . "', '$email', '$user_name', '" . $content . "', '', " . gmtime() . ", '" . real_ip() . "', '$status', '0', '$user_id')";
+            "('0', '" . $goodsInfo['goods_id'] . "', '$email', '$user_name', '" . $content . "', '" . $rating . "', " . gmtime() . ", '" . real_ip() . "', '$status', '0', '$user_id')";
 
     $result = $GLOBALS['db']->query($sql);
     clear_cache_files('comments_list.lbi');
