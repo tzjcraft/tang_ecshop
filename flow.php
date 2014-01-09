@@ -747,6 +747,8 @@ elseif ($_REQUEST['step'] == 'checkout')
     }
     $smarty->assign('payment_list', $payment_list);
 
+    $shipping_time = date("Y-m-d", strtotime("+1 day")) . ' 08:00';
+    $smarty->assign('shipping_time', $shipping_time);
     /* 取得包装与贺卡 */
     if ($total['real_goods_count'] > 0)
     {
@@ -1591,8 +1593,12 @@ elseif ($_REQUEST['step'] == 'done')
     if (isset($_POST['assign_shipping_time']) && $assign_shipping_time = trim($_POST['assign_shipping_time']))
     {
         $assign_shipping_time = date('Y-m-d H:i:s', strtotime($assign_shipping_time));
-        $order['assign_shipping_time'] = $assign_shipping_time;
     }
+    else
+    {
+        $assign_shipping_time = date("Y-m-d", strtotime("+1 day")) . ' 08:00';
+    }
+    $order['assign_shipping_time'] = $assign_shipping_time;
     /* 判断是不是实体商品 */
     foreach ($cart_goods AS $val)
     {

@@ -427,7 +427,7 @@
     <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="shippingTable">
             <tr>
               <td bgcolor="#ffffff" width="15%">指定送货时间</td>
-              <td bgcolor="#ffffff" width="85%"><input type="text" id="assign_shipping_time" class="inputBg" size="20" name="assign_shipping_time" value="" readonly="readonly" />
+              <td bgcolor="#ffffff" width="85%"><input type="text" id="assign_shipping_time" class="inputBg" size="20" name="assign_shipping_time" value="{$shipping_time}" required="required" readonly="readonly" />
                 <input name="selbtn3" type="button" id="selbtn3" onclick="return showCalendar('assign_shipping_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn3');" value="选择" class="button"/>
               </td>
             </tr>
