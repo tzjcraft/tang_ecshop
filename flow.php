@@ -294,6 +294,107 @@ elseif ($_REQUEST['step'] == 'login')
         }
     }
 }
+//直接购买
+elseif ($_REQUEST['step'] == 'add_to_cart1')
+{
+    include_once('includes/cls_json.php');
+    $_POST['goods'] = json_str_iconv($_POST['goods']);
+    if (!empty($_REQUEST['goods_id']) && empty($_POST['goods']))
+    {
+        if (!is_numeric($_REQUEST['goods_id']) || intval($_REQUEST['goods_id']) <= 0)
+        {
+            ecs_header("Location:./\n");
+        }
+        $goods_id = intval($_REQUEST['goods_id']);
+        exit;
+    }
+    $result = array('error' => 0, 'message' => '', 'content' => '', 'goods_id' => '');
+    $json  = new JSON;
+    if (empty($_POST['goods']))
+    {
+        $result['error'] = 1;
+        die($json->encode($result));
+    }
+    $goods = $json->decode($_POST['goods']);
+    /* 检查：如果商品有规格，而post的数据没有规格，把商品的规格属性通过JSON传到前台 */
+    if (empty($goods->spec) AND empty($goods->quick))
+    {
+        $sql = "SELECT a.attr_id, a.attr_name, a.attr_type, ".
+            "g.goods_attr_id, g.attr_value, g.attr_price " .
+        'FROM ' . $GLOBALS['ecs']->table('goods_attr') . ' AS g ' .
+        'LEFT JOIN ' . $GLOBALS['ecs']->table('attribute') . ' AS a ON a.attr_id = g.attr_id ' .
+        "WHERE a.attr_type != 0 AND g.goods_id = '" . $goods->goods_id . "' " .
+        'ORDER BY a.sort_order, g.attr_price, g.goods_attr_id';
+        $res = $GLOBALS['db']->getAll($sql);
+        if (!empty($res))
+        {
+            $spe_arr = array();
+            foreach ($res AS $row)
+            {
+                $spe_arr[$row['attr_id']]['attr_type'] = $row['attr_type'];
+                $spe_arr[$row['attr_id']]['name']     = $row['attr_name'];
+                $spe_arr[$row['attr_id']]['attr_id']     = $row['attr_id'];
+                $spe_arr[$row['attr_id']]['values'][] = array(
+                                                            'label'        => $row['attr_value'],
+                                                            'price'        => $row['attr_price'],
+                                                            'format_price' => price_format($row['attr_price'], false),
+                                                            'id'           => $row['goods_attr_id']);
+            }
+            $i = 0;
+            $spe_array = array();
+            foreach ($spe_arr AS $row)
+            {
+                $spe_array[]=$row;
+            }
+            $result['error']   = ERR_NEED_SELECT_ATTR;
+            $result['goods_id'] = $goods->goods_id;
+            $result['parent'] = $goods->parent;
+            $result['message'] = $spe_array;
+            die($json->encode($result));
+        }
+    }
+ 
+    /* 检查：商品数量是否合法 */
+    if (!is_numeric($goods->number) || intval($goods->number) <= 0)
+    {
+        $result['error']   = 1;
+        $result['message'] = $_LANG['invalid_number'];
+    }
+    /* 更新：购物车 */
+    else
+    {
+        // 更新：添加到购物车
+        if (addto_cart($goods->goods_id, $goods->number, $goods->spec, $goods->parent))
+        {
+            if ($_CFG['cart_confirm'] > 2)
+            {
+                $result['message'] = '';
+            }
+            else
+            {
+                $result['message'] = $_CFG['cart_confirm'] == 1 ? $_LANG['addto_cart_success_1'] : $_LANG['addto_cart_success_2'];
+            }
+            $result['content'] = insert_cart_info();
+            $result['one_step_buy'] = $_CFG['one_step_buy'];
+        }
+        else
+        {
+            $result['message']  = $err->last_message();
+            $result['error']    = $err->error_no;
+            $result['goods_id'] = stripslashes($goods->goods_id);
+            if (is_array($goods->spec))
+            {
+                $result['product_spec'] = implode(',', $goods->spec);
+            }
+            else
+            {
+                $result['product_spec'] = $goods->spec;
+            }
+        }
+    }
+    $result['confirm_type'] =3;
+    die($json->encode($result));
+}
 elseif ($_REQUEST['step'] == 'consignee')
 {
     /*------------------------------------------------------ */
@@ -1716,7 +1817,7 @@ elseif ($_REQUEST['step'] == 'done')
             $_LANG['order_placed_sms'] : $_LANG['order_placed_sms'] . '[' . $_LANG['sms_paid'] . ']';
         $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
     }
-    /* 给顾客发送短信 *///TODO: Zugor 添加配置shop_config 以便后台可以控制
+    /* 给顾客发送短信 START *///TODO: Zugor 添加配置shop_config 以便后台可以控制
     /* include_once('includes/cls_sms.php');
       $sms = new sms();
       $shippingAddress = get_region_by_id($order['country']) . ' ' . get_region_by_id($order['province']) . ' ' . get_region_by_id($order['city']);
@@ -1731,7 +1832,7 @@ elseif ($_REQUEST['step'] == 'done')
       $sms_content .= '. 取货时间: ' . date('Y-m-d H:i', strtotime($order['assign_shipping_time']));
       }
       $sms->send($consignee['mobile'], $sms_content); */
-
+    /* 给顾客发送短信 END */
     /* 如果订单金额为0 处理虚拟卡 */
     if ($order['order_amount'] <= 0)
     {

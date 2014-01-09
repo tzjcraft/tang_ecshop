@@ -900,7 +900,7 @@ switch ($tmp[0]) {
             $sms->send($_CFG['sms_shop_mobile'], sprintf($msg, $order['consignee'], $order['tel']), '', 13, 1);
             }
 
-        /* 给顾客发送短信 *///TODO: Zugor 添加配置shop_config 以便后台可以控制
+        /* 给顾客发送短信 START *///TODO: Zugor 添加配置shop_config 以便后台可以控制
         /* include_once(EC_PATH . '/includes/cls_sms.php');
           $sms = new sms();
           $shippingAddress = get_region_by_id($order['country']) . ' ' . get_region_by_id($order['province']) . ' ' . get_region_by_id($order['city']);
@@ -915,7 +915,7 @@ switch ($tmp[0]) {
           $sms_content .= '. 取货时间: ' . date('Y-m-d H:i', strtotime($order['assign_shipping_time']));
           }
           $sms->send($consignee['mobile'], $sms_content); */
-
+        /* 给顾客发送短信 END */
         /* 如果订单金额为0 处理虚拟卡 */
 	    if ($order['order_amount'] <= 0)
 	    {
