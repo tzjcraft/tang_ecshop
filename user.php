@@ -1092,6 +1092,17 @@ elseif ($action == 'act_edit_address')
         'default' => isset($_POST['defaultAddress']) && $_POST['defaultAddress'] ? 1 : 0
     );
 
+      /* 验证码检查 */
+    if (empty($_POST['captcha']))
+    {
+        show_message($_LANG['invalid_captcha'], $_LANG['address_list_lnk'], 'user.php?act=address_list', 'error');
+    }
+    /* 检查验证码 */
+    if (trim(strtoupper($_POST['captcha'])) != $_SESSION['sms_captcha'])
+    {
+        show_message($_LANG['invalid_captcha'], $_LANG['address_list_lnk'], 'user.php?act=address_list', 'error');
+    }
+
     if (update_address($address))
     {
         show_message($_LANG['edit_address_success'], $_LANG['address_list_lnk'], 'user.php?act=address_list');

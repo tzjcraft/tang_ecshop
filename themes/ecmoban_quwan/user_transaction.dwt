@@ -812,7 +812,7 @@
                 <tr>
                     <td align="right" bgcolor="#ffffff">验证码：</td>
                     <td colspan="3" align="left" bgcolor="#ffffff">
-                        <input class="inputBg" type="text" name="captcha" size="8" required>
+                        <input class="inputBg" style="text-transform:uppercase;" type="text" name="captcha" size="8" required>
                     </td>
                 </tr>
                 <tr>
