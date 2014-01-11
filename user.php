@@ -1034,6 +1034,7 @@ elseif ($action == 'address_list')
     }
 
     $smarty->assign('consignee_list', $consignee_list);
+    $smarty->assign('consigneeNums', count($consignee_list));
 
     //取得国家列表，如果有收货人列表，取得省市区列表
     foreach ($consignee_list AS $region_id => $consignee)

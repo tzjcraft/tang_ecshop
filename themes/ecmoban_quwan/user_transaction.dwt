@@ -801,13 +801,20 @@
                 </tr>
                 <tr>
                   <td align="right" bgcolor="#ffffff">{$lang.consignee_name}：</td>
-                  <td align="left" bgcolor="#ffffff"><input name="consignee" type="text" class="inputBg" id="consignee_{$sn}" value="{$consignee.consignee|escape}" />
+                  <td align="left" bgcolor="#ffffff"><input name="consignee" type="text" class="inputBg" id="consignee_{$sn}" value="{$consignee.consignee|escape}" required  />
                   {$lang.require_field} </td>
                   <td align="right" bgcolor="#ffffff">{$lang.backup_phone}：</td>
-                  <td align="left" bgcolor="#ffffff"><input name="mobile" type="text" class="inputBg" id="mobile_{$sn}" value="{$consignee.mobile|escape}" />
+                  <td align="left" bgcolor="#ffffff"><input name="mobile" type="text" class="inputBg" id="mobile_{$sn}" value="{$consignee.mobile|escape}" required />
+<input id="sendSmsCaptcha_{$sn}" name="sendSmsCaptchaButton" class="button" type="button" onclick="return smsConsigneeCaptcha('mobile_{$sn}', 'sendSmsCaptcha_{$sn}', '{$consigneeNums}')" value=" 获取验证码 ">
                     {$lang.require_field}</td>
                 </tr>
-                
+
+                <tr>
+                    <td align="right" bgcolor="#ffffff">验证码：</td>
+                    <td colspan="3" align="left" bgcolor="#ffffff">
+                        <input class="inputBg" type="text" name="captcha" size="8" required>
+                    </td>
+                </tr>
                 <tr>
                   <td align="right" bgcolor="#ffffff">&nbsp;</td>
                   <td colspan="3" align="center" bgcolor="#ffffff">
