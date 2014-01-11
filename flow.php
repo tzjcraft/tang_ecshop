@@ -445,6 +445,7 @@ elseif ($_REQUEST['step'] == 'consignee')
         $smarty->assign('name_of_region',
                 array($_CFG['name_of_region_5'], $_CFG['name_of_region_6'], $_CFG['name_of_region_7'], $_CFG['name_of_region_4']));
         $smarty->assign('consignee_list', $consignee_list);
+        $smarty->assign('consigneeNums', count($consignee_list));
 
         /* 取得每个收货地址的省市区列表 */
         $province_list = array();
@@ -488,6 +489,21 @@ elseif ($_REQUEST['step'] == 'consignee')
             'best_time'     => empty($_POST['best_time'])  ? '' :   compile_str($_POST['best_time']),
         );
 
+        /* 验证码检查 */
+        if (empty($_POST['captcha']))
+        {
+            ecs_header("Location: flow.php?step=consignee\n");
+        }
+        /* 检查验证码 */
+        if (trim(strtoupper($_POST['captcha'])) != $_SESSION['sms_captcha'])
+        {
+            ecs_header("Location: flow.php?step=consignee\n");
+        }
+
+        if (update_address($address))
+        {
+            ecs_header("Location: flow.php?step=checkout\n");
+        }
         if ($_SESSION['user_id'] > 0)
         {
             include_once(ROOT_PATH . 'includes/lib_transaction.php');

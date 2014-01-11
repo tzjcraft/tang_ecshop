@@ -1082,3 +1082,49 @@ function cancel_div()
     i++;
   }
 }
+
+var wait_consignee_captcha = 10;
+function smsConsigneeCaptcha(mobileName, smsButton, consigneeNums)
+{
+    var sendButton = document.getElementById(smsButton);//.disabled = false
+    if (wait_consignee_captcha == 10) {
+        var mobile = document.getElementById(mobileName).value;
+        Ajax.call('user.php?act=sms_captcha', 'mobile_phone=' + mobile, '', 'POST', 'JSON');
+    }
+    if (wait_consignee_captcha == 0) {
+        sendButton.disabled = false;
+        enableOtherButton(smsButton, consigneeNums)
+        sendButton.value = "获取验证码";
+        wait_consignee_captcha = 10;
+    } else {
+        if (wait_consignee_captcha == 10)
+        {
+            disableOtherButton(smsButton, consigneeNums);
+        }
+        sendButton.value = "重新发送(" + wait_consignee_captcha + ")";
+        wait_consignee_captcha--;
+        setTimeout('smsConsigneeCaptcha("' + mobileName + '","' + smsButton + '","' + consigneeNums + '")', 1000);
+    }
+}
+
+function disableOtherButton(currentButtonId, consigneeNums)
+{
+    for (var i = 0; i < consigneeNums; i++)
+    {
+        var loopButtonId = 'sendSmsCaptcha_' + i;
+        var loopButtonElement = document.getElementById(loopButtonId);
+        loopButtonElement.setAttribute("disabled", true);
+    }
+    return true;
+}
+
+function enableOtherButton(currentButtonId, consigneeNums)
+{
+    for (var i = 0; i < consigneeNums; i++)
+    {
+        var loopButtonId = 'sendSmsCaptcha_' + i;
+        var loopButtonElement = document.getElementById(loopButtonId);
+        loopButtonElement.disabled = false;
+    }
+    return true;
+}
