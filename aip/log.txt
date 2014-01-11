@@ -1,0 +1,331 @@
+集成时请注意：
+本文件log.txt请不要删除。
+该文本用于写日志函数。
+执行日期：20131222220425
+<notify><payment_type>1</payment_type><subject>2013122251732</subject><trade_no>2013122201806881</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:07:01</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122251732108</out_trade_no><notify_time>2013-12-22 22:07:15</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:07:15</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:07:15</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>1614d9975dbe984969117f20a53281ed6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222220752
+<notify><payment_type>1</payment_type><subject>2013122212672</subject><trade_no>2013122201737781</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 21:45:42</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122212672111</out_trade_no><notify_time>2013-12-22 22:10:42</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 21:46:04</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 21:46:04</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>034210913a83119793820e206ef72a636i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222221235
+<notify><payment_type>1</payment_type><subject>2013122256980</subject><trade_no>2013122201790781</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:01:34</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122256980109</out_trade_no><notify_time>2013-12-22 22:15:25</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:01:57</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:01:57</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>dc63853b6ed6f6524fd44e1e2d2188fa6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222222044
+<notify><payment_type>1</payment_type><subject>2013122242721</subject><trade_no>2013122201847281</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:23:22</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122242721121</out_trade_no><notify_time>2013-12-22 22:23:34</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:23:34</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:23:34</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>e000d0bc511ce8ee00ae5a87773ada7b6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222222047
+<notify><payment_type>1</payment_type><subject>2013122212451</subject><trade_no>2013122201833581</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:18:01</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122212451122</out_trade_no><notify_time>2013-12-22 22:23:37</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:19:13</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:19:13</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>ae1093ba228f0e71f092e2869f70ebf76i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222222220
+<notify><payment_type>1</payment_type><subject>2013122263927</subject><trade_no>2013122201851881</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:24:52</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122263927120</out_trade_no><notify_time>2013-12-22 22:25:10</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:25:10</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:25:10</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>982f00cc0922679d291101562c42b2bd6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222222220
+订单号:120
+执行日期：20131222222220
+TRADE_FINISHED
+执行日期：20131222222254
+<notify><payment_type>1</payment_type><subject>2013122256980</subject><trade_no>2013122201790781</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:01:34</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122256980109</out_trade_no><notify_time>2013-12-22 22:25:44</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:01:57</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:01:57</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>dc63853b6ed6f6524fd44e1e2d2188fa6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222222254
+订单号:109
+执行日期：20131222222254
+TRADE_FINISHED
+执行日期：20131222222434
+<notify><payment_type>1</payment_type><subject>2013122242721</subject><trade_no>2013122201847281</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:23:22</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122242721121</out_trade_no><notify_time>2013-12-22 22:27:24</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:23:34</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:23:34</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>e000d0bc511ce8ee00ae5a87773ada7b6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222222434
+订单号:121
+执行日期：20131222222434
+TRADE_FINISHED
+执行日期：20131222222636
+<notify><payment_type>1</payment_type><subject>2013122263927</subject><trade_no>2013122201851881</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:24:52</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122263927120</out_trade_no><notify_time>2013-12-22 22:29:26</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:25:10</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:25:10</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>982f00cc0922679d291101562c42b2bd6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222222636
+订单号:120
+执行日期：20131222222636
+TRADE_FINISHED
+执行日期：20131222222837
+<notify><payment_type>1</payment_type><subject>2013122251732</subject><trade_no>2013122201806881</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:07:01</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122251732108</out_trade_no><notify_time>2013-12-22 22:31:27</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:07:15</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:07:15</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>1614d9975dbe984969117f20a53281ed6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222222837
+订单号:108
+执行日期：20131222222837
+TRADE_FINISHED
+执行日期：20131222223033
+<notify><payment_type>1</payment_type><subject>2013122212451</subject><trade_no>2013122201833581</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:18:01</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122212451122</out_trade_no><notify_time>2013-12-22 22:33:22</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:19:13</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:19:13</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>ae1093ba228f0e71f092e2869f70ebf76i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222223033
+订单号:122
+执行日期：20131222223033
+TRADE_FINISHED
+执行日期：20131222223033
+支付编号122
+执行日期：20131222223129
+<notify><payment_type>1</payment_type><subject>2013122286864</subject><trade_no>2013122201879981</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:33:58</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122286864119</out_trade_no><notify_time>2013-12-22 22:34:19</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:34:19</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:34:19</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>648e4ca3e60bc5d726ad442a0b4f2d416i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222223129
+订单号:119
+执行日期：20131222223129
+TRADE_FINISHED
+执行日期：20131222223129
+支付编号119
+执行日期：20131222223457
+<notify><payment_type>1</payment_type><subject>2013122242721</subject><trade_no>2013122201847281</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:23:22</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122242721121</out_trade_no><notify_time>2013-12-22 22:37:47</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:23:34</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:23:34</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>e000d0bc511ce8ee00ae5a87773ada7b6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222223457
+订单号:121
+执行日期：20131222223457
+TRADE_FINISHED
+执行日期：20131222223457
+支付编号121
+执行日期：20131222223549
+<notify><payment_type>1</payment_type><subject>2013122286864</subject><trade_no>2013122201879981</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:33:58</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122286864119</out_trade_no><notify_time>2013-12-22 22:38:39</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:34:19</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:34:19</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>648e4ca3e60bc5d726ad442a0b4f2d416i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222223549
+订单号:119
+执行日期：20131222223549
+TRADE_FINISHED
+执行日期：20131222223549
+支付编号119
+执行日期：20131222223614
+<notify><payment_type>1</payment_type><subject>2013122263927</subject><trade_no>2013122201851881</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:24:52</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122263927120</out_trade_no><notify_time>2013-12-22 22:39:04</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:25:10</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:25:10</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>982f00cc0922679d291101562c42b2bd6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222223614
+订单号:120
+执行日期：20131222223614
+TRADE_FINISHED
+执行日期：20131222223614
+支付编号120
+执行日期：20131222224050
+<notify><payment_type>1</payment_type><subject>2013122212451</subject><trade_no>2013122201833581</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:18:01</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122212451122</out_trade_no><notify_time>2013-12-22 22:43:40</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:19:13</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:19:13</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>ae1093ba228f0e71f092e2869f70ebf76i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222224050
+订单号:122
+执行日期：20131222224050
+TRADE_FINISHED
+执行日期：20131222224050
+支付编号122
+执行日期：20131222224257
+<notify><payment_type>1</payment_type><subject>2013122221738</subject><trade_no>2013122201911681</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:45:33</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122221738118</out_trade_no><notify_time>2013-12-22 22:45:47</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:45:47</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:45:47</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>a8091e493071427417e1d805b100ca7f6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222224257
+订单号:118
+执行日期：20131222224257
+TRADE_FINISHED
+执行日期：20131222224257
+支付编号118
+执行日期：20131222224257
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '118'
+执行日期：20131222224257
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '118'
+执行日期：20131222224405
+<notify><payment_type>1</payment_type><subject>2013122204748</subject><trade_no>2013122201914981</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:46:43</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122204748117</out_trade_no><notify_time>2013-12-22 22:46:55</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:46:55</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:46:55</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>5762bc162283d5912f53d75370abed316i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222224405
+订单号:117
+执行日期：20131222224405
+TRADE_FINISHED
+执行日期：20131222224405
+支付编号117
+执行日期：20131222224405
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '117'
+执行日期：20131222224405
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '117'
+执行日期：20131222224410
+<notify><payment_type>1</payment_type><subject>2013122242721</subject><trade_no>2013122201847281</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:23:22</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122242721121</out_trade_no><notify_time>2013-12-22 22:47:00</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:23:34</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:23:34</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>e000d0bc511ce8ee00ae5a87773ada7b6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222224410
+订单号:121
+执行日期：20131222224410
+TRADE_FINISHED
+执行日期：20131222224410
+支付编号121
+执行日期：20131222224410
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '121'
+执行日期：20131222224410
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '121'
+执行日期：20131222224608
+<notify><payment_type>1</payment_type><subject>2013122286864</subject><trade_no>2013122201879981</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:33:58</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122286864119</out_trade_no><notify_time>2013-12-22 22:48:58</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:34:19</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:34:19</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>648e4ca3e60bc5d726ad442a0b4f2d416i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222224608
+订单号:119
+执行日期：20131222224608
+TRADE_FINISHED
+执行日期：20131222224608
+支付编号119
+执行日期：20131222224608
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '119'
+执行日期：20131222224608
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '119'
+执行日期：20131222224615
+<notify><payment_type>1</payment_type><subject>2013122221738</subject><trade_no>2013122201911681</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:45:33</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122221738118</out_trade_no><notify_time>2013-12-22 22:49:05</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:45:47</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:45:47</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>a8091e493071427417e1d805b100ca7f6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222224615
+订单号:118
+执行日期：20131222224615
+TRADE_FINISHED
+执行日期：20131222224615
+支付编号118
+执行日期：20131222224615
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '118'
+执行日期：20131222224706
+<notify><payment_type>1</payment_type><subject>2013122263927</subject><trade_no>2013122201851881</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:24:52</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122263927120</out_trade_no><notify_time>2013-12-22 22:49:56</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:25:10</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:25:10</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>982f00cc0922679d291101562c42b2bd6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222224706
+订单号:120
+执行日期：20131222224706
+TRADE_FINISHED
+执行日期：20131222224706
+支付编号120
+执行日期：20131222224706
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '120'
+执行日期：20131222224706
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '120'
+执行日期：20131222224736
+<notify><payment_type>1</payment_type><subject>2013122204748</subject><trade_no>2013122201914981</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:46:43</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122204748117</out_trade_no><notify_time>2013-12-22 22:50:26</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:46:55</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:46:55</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>5762bc162283d5912f53d75370abed316i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222224736
+订单号:117
+执行日期：20131222224736
+TRADE_FINISHED
+执行日期：20131222224736
+支付编号117
+执行日期：20131222224736
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '117'
+执行日期：20131222225524
+<notify><payment_type>1</payment_type><subject>2013122286864</subject><trade_no>2013122201879981</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:33:58</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122286864119</out_trade_no><notify_time>2013-12-22 22:58:14</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:34:19</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:34:19</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>648e4ca3e60bc5d726ad442a0b4f2d416i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222225524
+订单号:119
+执行日期：20131222225524
+TRADE_FINISHED
+执行日期：20131222225524
+支付编号119
+执行日期：20131222225524
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '119'
+执行日期：20131222225647
+<notify><payment_type>1</payment_type><subject>2013122221738</subject><trade_no>2013122201911681</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:45:33</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122221738118</out_trade_no><notify_time>2013-12-22 22:59:36</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:45:47</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:45:47</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>a8091e493071427417e1d805b100ca7f6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222225647
+订单号:118
+执行日期：20131222225647
+TRADE_FINISHED
+执行日期：20131222225647
+支付编号118
+执行日期：20131222225647
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '118'
+执行日期：20131222225743
+<notify><payment_type>1</payment_type><subject>2013122222065</subject><trade_no>2013122274925032</trade_no><buyer_email>1227060261@qq.com</buyer_email><gmt_create>2013-12-22 23:00:28</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122222065127</out_trade_no><notify_time>2013-12-22 23:00:33</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 23:00:33</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 23:00:33</gmt_close><price>0.01</price><buyer_id>2088002484258326</buyer_id><notify_id>fab4c5e7f4d22574c2f6074f76092c623s</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222225743
+订单号:127
+执行日期：20131222225743
+TRADE_FINISHED
+执行日期：20131222225743
+支付编号127
+执行日期：20131222225743
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '127'
+执行日期：20131222225743
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '127'
+执行日期：20131222225758
+<notify><payment_type>1</payment_type><subject>2013122204748</subject><trade_no>2013122201914981</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:46:43</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122204748117</out_trade_no><notify_time>2013-12-22 23:00:48</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:46:55</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:46:55</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>5762bc162283d5912f53d75370abed316i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222225758
+订单号:117
+执行日期：20131222225758
+TRADE_FINISHED
+执行日期：20131222225758
+支付编号117
+执行日期：20131222225758
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '117'
+执行日期：20131222230139
+<notify><payment_type>1</payment_type><subject>2013122222065</subject><trade_no>2013122274925032</trade_no><buyer_email>1227060261@qq.com</buyer_email><gmt_create>2013-12-22 23:00:28</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122222065127</out_trade_no><notify_time>2013-12-22 23:04:29</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 23:00:33</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 23:00:33</gmt_close><price>0.01</price><buyer_id>2088002484258326</buyer_id><notify_id>fab4c5e7f4d22574c2f6074f76092c623s</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222230139
+订单号:127
+执行日期：20131222230139
+TRADE_FINISHED
+执行日期：20131222230139
+支付编号127
+执行日期：20131222230139
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '127'
+执行日期：20131222230249
+<notify><payment_type>1</payment_type><subject>2013122277872</subject><trade_no>2013122201722681</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 21:40:48</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122277872112</out_trade_no><notify_time>2013-12-22 23:05:37</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 21:41:10</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 21:41:10</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>d38543dbe06a54eb0920ecb02522b95f6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222230249
+订单号:112
+执行日期：20131222230249
+TRADE_FINISHED
+执行日期：20131222230249
+支付编号112
+执行日期：20131222230249
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '112'
+执行日期：20131222230249
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '112'
+执行日期：20131222230702
+<notify><payment_type>1</payment_type><subject>2013122221738</subject><trade_no>2013122201911681</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:45:33</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122221738118</out_trade_no><notify_time>2013-12-22 23:09:52</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:45:47</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:45:47</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>a8091e493071427417e1d805b100ca7f6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222230702
+订单号:118
+执行日期：20131222230702
+TRADE_FINISHED
+执行日期：20131222230702
+支付编号118
+执行日期：20131222230702
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '118'
+执行日期：20131222230739
+<notify><payment_type>1</payment_type><subject>2013122212672</subject><trade_no>2013122201737781</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 21:45:42</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122212672111</out_trade_no><notify_time>2013-12-22 23:10:29</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 21:46:04</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 21:46:04</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>034210913a83119793820e206ef72a636i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222230739
+订单号:111
+执行日期：20131222230739
+TRADE_FINISHED
+执行日期：20131222230739
+支付编号111
+执行日期：20131222230739
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '111'
+执行日期：20131222230739
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '111'
+执行日期：20131222231155
+<notify><payment_type>1</payment_type><subject>2013122222065</subject><trade_no>2013122274925032</trade_no><buyer_email>1227060261@qq.com</buyer_email><gmt_create>2013-12-22 23:00:28</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122222065127</out_trade_no><notify_time>2013-12-22 23:14:45</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 23:00:33</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 23:00:33</gmt_close><price>0.01</price><buyer_id>2088002484258326</buyer_id><notify_id>fab4c5e7f4d22574c2f6074f76092c623s</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222231155
+订单号:127
+执行日期：20131222231155
+TRADE_FINISHED
+执行日期：20131222231155
+支付编号127
+执行日期：20131222231155
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '127'
+执行日期：20131222231307
+<notify><payment_type>1</payment_type><subject>2013122217523</subject><trade_no>2013122201755481</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 21:51:00</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122217523110</out_trade_no><notify_time>2013-12-22 23:15:57</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 21:51:28</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 21:51:28</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>eff6409da8e34f33f0d1343a87f348726i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222231307
+订单号:110
+执行日期：20131222231307
+TRADE_FINISHED
+执行日期：20131222231307
+支付编号110
+执行日期：20131222231307
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '110'
+执行日期：20131222231307
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '110'
+执行日期：20131222232131
+<notify><payment_type>1</payment_type><subject>2013122222065</subject><trade_no>2013122274925032</trade_no><buyer_email>1227060261@qq.com</buyer_email><gmt_create>2013-12-22 23:00:28</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122222065127</out_trade_no><notify_time>2013-12-22 23:24:20</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 23:00:33</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 23:00:33</gmt_close><price>0.01</price><buyer_id>2088002484258326</buyer_id><notify_id>fab4c5e7f4d22574c2f6074f76092c623s</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222232131
+订单号:127
+执行日期：20131222232131
+TRADE_FINISHED
+执行日期：20131222232131
+支付编号127
+执行日期：20131222232131
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '127'
+执行日期：20131222232232
+<notify><payment_type>1</payment_type><subject>2013122256980</subject><trade_no>2013122201790781</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:01:34</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122256980109</out_trade_no><notify_time>2013-12-22 23:25:21</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:01:57</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:01:57</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>dc63853b6ed6f6524fd44e1e2d2188fa6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222232232
+订单号:109
+执行日期：20131222232232
+TRADE_FINISHED
+执行日期：20131222232232
+支付编号109
+执行日期：20131222232232
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '109'
+执行日期：20131222232232
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '109'
+执行日期：20131222232851
+<notify><payment_type>1</payment_type><subject>2013122251732</subject><trade_no>2013122201806881</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:07:01</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122251732108</out_trade_no><notify_time>2013-12-22 23:31:41</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:07:15</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:07:15</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>1614d9975dbe984969117f20a53281ed6i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222232851
+订单号:108
+执行日期：20131222232851
+TRADE_FINISHED
+执行日期：20131222232851
+支付编号108
+执行日期：20131222232851
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '108'
+执行日期：20131222232851
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '108'
+执行日期：20131222233053
+<notify><payment_type>1</payment_type><subject>2013122258492</subject><trade_no>2013122201435781</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 20:09:16</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122258492105</out_trade_no><notify_time>2013-12-22 23:33:43</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 20:09:40</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 20:09:40</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>dd78d7c1101a606785e594e560822f956i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222233053
+订单号:105
+执行日期：20131222233053
+TRADE_FINISHED
+执行日期：20131222233053
+支付编号105
+执行日期：20131222233053
+pay_logSELECT * FROM `mzt074931`.`ecs_pay_log` WHERE log_id = '105'
+执行日期：20131222233053
+修改此次支付操作的状态为已付款UPDATE `mzt074931`.`ecs_pay_log` SET is_paid = '1' WHERE log_id = '105'
+执行日期：20131222234016
+<notify><payment_type>1</payment_type><subject>2013122212451</subject><trade_no>2013122201833581</trade_no><buyer_email>15921891828</buyer_email><gmt_create>2013-12-22 22:18:01</gmt_create><notify_type>trade_status_sync</notify_type><quantity>1</quantity><out_trade_no>2013122212451122</out_trade_no><notify_time>2013-12-22 23:43:06</notify_time><seller_id>2088111866264612</seller_id><trade_status>TRADE_FINISHED</trade_status><is_total_fee_adjust>N</is_total_fee_adjust><total_fee>0.01</total_fee><gmt_payment>2013-12-22 22:19:13</gmt_payment><seller_email>ttjm@jingyagroup.com</seller_email><gmt_close>2013-12-22 22:19:13</gmt_close><price>0.01</price><buyer_id>2088702040400814</buyer_id><notify_id>ae1093ba228f0e71f092e2869f70ebf76i</notify_id><use_coupon>N</use_coupon></notify>
+执行日期：20131222234016
+订单号:122
+执行日期：20131222234016
+TRADE_FINISHED
