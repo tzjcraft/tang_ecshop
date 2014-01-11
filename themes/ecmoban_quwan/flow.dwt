@@ -419,7 +419,7 @@
     <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="shippingTable">
             <tr>
               <td bgcolor="#ffffff" width="15%">指定计划取货时间</td>
-              <td bgcolor="#ffffff" width="85%"><input type="text" id="assign_shipping_time" class="inputBg" size="20" name="assign_shipping_time" value="" readonly="readonly" />
+              <td bgcolor="#ffffff" width="85%"><input type="text" id="assign_shipping_time" class="inputBg" size="20" name="assign_shipping_time" value="{$shipping_time}" readonly="readonly" />
                 <input name="selbtn3" type="button" id="selbtn3" onclick="return showCalendar('assign_shipping_time', '%Y-%m-%d %H:%M', '24', false, 'selbtn3');" value="选择" class="button"/>
               </td>
             </tr>
@@ -453,98 +453,7 @@
             </tr>
             <!-- {/foreach} 循环支付方式 -->
           </table>
-    </div>
-    <!--{else}-->
-        <input name = "payment" type="radio" value = "-1" checked="checked"  style="display:none"/>
-    <!--{/if}-->
-    <div class="blank"></div>
-          <!-- {if $pack_list} 是否有包装 -->
-          <div class="flowBox">
-          <h6><span>{$lang.goods_package}</span></h6>
-          <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="packTable">
-            <tr>
-              <th width="5%" scope="col" bgcolor="#ffffff">&nbsp;</th>
-              <th width="35%" scope="col" bgcolor="#ffffff">{$lang.name}</th>
-              <th width="22%" scope="col" bgcolor="#ffffff">{$lang.price}</th>
-              <th width="22%" scope="col" bgcolor="#ffffff">{$lang.free_money}</th>
-              <th scope="col" bgcolor="#ffffff">{$lang.img}</th>
-            </tr>
-            <tr>
-              <td valign="top" bgcolor="#ffffff"><input type="radio" name="pack" value="0" {if $order.pack_id eq 0}checked="true"{/if} onclick="selectPack(this)" /></td>
-              <td valign="top" bgcolor="#ffffff"><strong>{$lang.no_pack}</strong></td>
-              <td valign="top" bgcolor="#ffffff">&nbsp;</td>
-              <td valign="top" bgcolor="#ffffff">&nbsp;</td>
-              <td valign="top" bgcolor="#ffffff">&nbsp;</td>
-            </tr>
-            <!-- {foreach from=$pack_list item=pack} 循环包装 -->
-            <tr>
-              <td valign="top" bgcolor="#ffffff"><input type="radio" name="pack" value="{$pack.pack_id}" {if $order.pack_id eq $pack.pack_id}checked="true"{/if} onclick="selectPack(this)" />
-              </td>
-              <td valign="top" bgcolor="#ffffff"><strong>{$pack.pack_name}</strong></td>
-              <td valign="top" bgcolor="#ffffff" align="right">{$pack.format_pack_fee}</td>
-              <td valign="top" bgcolor="#ffffff" align="right">{$pack.format_free_money}</td>
-              <td valign="top" bgcolor="#ffffff" align="center">
-                  <!-- {if $pack.pack_img} 是否有图片 -->
-                  <a href="data/packimg/{$pack.pack_img}" target="_blank" class="f6">{$lang.view}</a>
-                  <!-- {else} -->
-                  {$lang.no}
-                  <!-- {/if} -->
-               </td>
-            </tr>
-            <!-- {/foreach} 循环包装 -->
-          </table>
-       </div>
-             <div class="blank"></div>
-          <!-- {/if} 是否使用包装 -->
-
-          <!-- {if $card_list} 是否有贺卡 -->
-          <div class="flowBox">
-          <h6><span>{$lang.goods_card}</span></h6>
-          <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="cardTable">
-            <tr>
-              <th bgcolor="#ffffff" width="5%" scope="col">&nbsp;</th>
-              <th bgcolor="#ffffff" width="35%" scope="col">{$lang.name}</th>
-              <th bgcolor="#ffffff" width="22%" scope="col">{$lang.price}</th>
-              <th bgcolor="#ffffff" width="22%" scope="col">{$lang.free_money}</th>
-              <th bgcolor="#ffffff" scope="col">{$lang.img}</th>
-            </tr>
-            <tr>
-              <td bgcolor="#ffffff" valign="top"><input type="radio" name="card" value="0" {if $order.card_id eq 0}checked="true"{/if} onclick="selectCard(this)" /></td>
-              <td bgcolor="#ffffff" valign="top"><strong>{$lang.no_card}</strong></td>
-              <td bgcolor="#ffffff" valign="top">&nbsp;</td>
-              <td bgcolor="#ffffff" valign="top">&nbsp;</td>
-              <td bgcolor="#ffffff" valign="top">&nbsp;</td>
-            </tr>
-            <!-- {foreach from=$card_list item=card} 循环贺卡 -->
-            <tr>
-              <td valign="top" bgcolor="#ffffff"><input type="radio" name="card" value="{$card.card_id}" {if $order.card_id eq $card.card_id}checked="true"{/if} onclick="selectCard(this)"  />
-              </td>
-              <td valign="top" bgcolor="#ffffff"><strong>{$card.card_name}</strong></td>
-              <td valign="top" align="right" bgcolor="#ffffff">{$card.format_card_fee}</td>
-              <td valign="top" align="right" bgcolor="#ffffff">{$card.format_free_money}</td>
-              <td valign="top" align="center" bgcolor="#ffffff">
-                  <!-- {if $card.card_img} 是否有图片 -->
-                  <a href="data/cardimg/{$card.card_img}" target="_blank" class="f6">{$lang.view}</a>
-                  <!-- {else} -->
-                  {$lang.no}
-                  <!-- {/if} -->
-                </td>
-            </tr>
-            <!-- {/foreach} 循环贺卡 -->
-            <tr>
-              <td bgcolor="#ffffff"></td>
-              <td bgcolor="#ffffff" valign="top"><strong>{$lang.bless_note}:</strong></td>
-              <td bgcolor="#ffffff" colspan="3"><textarea name="card_message" cols="60" rows="3" style="width:auto; border:1px solid #ccc;">{$order.card_message|escape}</textarea></td>
-            </tr>
-          </table>
-        </div>
-                <div class="blank"></div>
-        <!-- {/if} 是否使用贺卡 -->
-
-
-      <div class="flowBox">
-    <h6><span>{$lang.other_info}</span></h6>
-      <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
+          <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
             <!-- {if $allow_use_surplus} 是否使用余额 -->
             <tr>
               <td width="20%" bgcolor="#ffffff"><strong>{$lang.use_surplus}: </strong></td>
@@ -578,27 +487,7 @@
               </td>
             </tr>
             <!-- {/if} 是否使用红包 -->
-            <!-- {if $inv_content_list} 能否开发票 -->
-            <tr>
-              <td bgcolor="#ffffff"><strong>{$lang.invoice}:</strong>
-                <input name="need_inv" type="checkbox"  class="input" id="ECS_NEEDINV" onclick="changeNeedInv()" value="1" {if $order.need_inv}checked="true"{/if} />
-              </td>
-              <td bgcolor="#ffffff">
-                <!-- {if $inv_type_list} -->
-                {$lang.invoice_type}
-                <select name="inv_type" id="ECS_INVTYPE" {if $order.need_inv neq 1}disabled="true"{/if} onchange="changeNeedInv()" style="border:1px solid #ccc;">
-                {html_options options=$inv_type_list selected=$order.inv_type}</select>
-                <!-- {/if} -->
-                {$lang.invoice_title}
-                <input name="inv_payee" type="text"  class="input" id="ECS_INVPAYEE" size="20" {if !$order.need_inv}disabled="true"{/if} value="{$order.inv_payee}" onblur="changeNeedInv()" />
-                {$lang.invoice_content}
-              <select name="inv_content" id="ECS_INVCONTENT" {if $order.need_inv neq 1}disabled="true"{/if}  onchange="changeNeedInv()" style="border:1px solid #ccc;">
-
-                {html_options values=$inv_content_list output=$inv_content_list selected=$order.inv_content}
-
-                </select></td>
-            </tr>
-            <!-- {/if} -->
+            
             <tr>
               <td valign="top" bgcolor="#ffffff"><strong>{$lang.order_postscript}:</strong></td>
               <td bgcolor="#ffffff"><textarea name="postscript" cols="80" rows="3" id="postscript" style="border:1px solid #ccc;">{$order.postscript|escape}</textarea></td>
@@ -616,7 +505,12 @@
             <!-- {/if} 缺货处理结束 -->
           </table>
     </div>
+    <!--{else}-->
+        <input name = "payment" type="radio" value = "-1" checked="checked"  style="display:none"/>
+    <!--{/if}-->
     <div class="blank"></div>
+
+          
     <div class="flowBox">
     <h6><span>{$lang.fee_total}</span></h6>
           <!-- #BeginLibraryItem "/Library/order_total.lbi" --><!-- #EndLibraryItem -->

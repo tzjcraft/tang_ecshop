@@ -1,0 +1,52 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- {if $hot_goods} -->
+
+<div class="box cat_goods">
+<h3>
+  <span>
+  <ul>
+ <li class="name_img">
+   <a  href="../search.php?intro=hot" >热卖产品  </a>
+ </li> 
+   
+  </ul>
+  </span>  
+  <a class="more"  href="../search.php?intro=hot">更多商品</a>
+</h3>
+
+
+
+
+
+<div class="box_1 cat_goods_box">
+<div class="clearfix goodsBox" style="border:none;">
+  <!--{foreach from=$hot_goods item=goods}-->
+  <div class="goodsItem">
+       
+           <a href="{$goods.url}"><img src="{$goods.thumb}" alt="{$goods.name|escape:html}" class="goodsimg" /></a><br />
+           <p class="f1"><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_style_name}</a></p>
+           <p class="f1">{if $goods.buy_num}以有{$goods.buy_num}人购买{else}暂无人购买{/if}</p>
+           <font class="f1">
+           <!-- {if $goods.promote_price neq ""} -->
+          {$goods.promote_price}
+          <!-- {else}-->
+          {$goods.shop_price}
+          <!--{/if}-->
+           </font>
+        </div>
+  <!--{/foreach}-->
+ </div>
+</div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ 
+ <div class="blank"></div>
+<!-- {/if} -->

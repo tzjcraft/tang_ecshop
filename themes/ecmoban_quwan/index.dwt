@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="{$ecs_css_path}" rel="stylesheet" type="text/css" />
+<link rel="alternate" type="application/rss+xml" title="RSS|{$page_title}" href="{$feed_url}" />
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,index.js'}
+</head>
+<body class="index_body">
+<!-- #BeginLibraryItem "/library/page_header.lbi" --><!-- #EndLibraryItem -->
+
+<TABLE cellSpacing=0 cellPadding=0 width=960 align=center border=0>
+  <TBODY>
+  <TR>
+   
+    <TD height="28" width="100%">
+      <MARQUEE scrollAmount=4 scrollDelay=90 direction=rtl 
+      >{$shop_notice}</MARQUEE></TD>
+  </TR></TBODY></TABLE>
+
+<div class="block clearfix"> 
+
+
+<!-- TemplateBeginEditable name="首页顶部广告" -->
+<!-- TemplateEndEditable -->
+
+
+
+
+
+
+ 
+  
+ 
+  
+  
+   <!--焦点图和站内快讯 START-->
+    <div class="box clearfix">
+       <!-- #BeginLibraryItem "/library/index_ad.lbi" --><!-- #EndLibraryItem -->
+
+        </div>
+    <div class="blank"></div>
+   <!-- TemplateBeginEditable name="主区域" -->
+<!-- #BeginLibraryItem "/library/recommend_hot.lbi" -->
+
+<!-- {if $hot_goods} -->
+
+<div class="box cat_goods cat_goodsin">
+<h3>
+  <span>
+  <ul>
+ <li class="name_img">
+   <a  href="../search.php?intro=hot" >热卖产品  </a>
+ </li> 
+   
+  </ul>
+  </span>  
+  <a class="more"  href="../search.php?intro=hot">更多商品</a>
+</h3>
+
+
+
+
+
+<div class="box_1 cat_goods_box">
+<div class="clearfix goodsBox" style="border:none;">
+  <!--{foreach from=$hot_goods item=goods}-->
+  <div class="goodsItem">
+       
+           <a href="{$goods.url}"><img src="{$goods.thumb}" alt="{$goods.name|escape:html}" class="goodsimg" /></a><br />
+           <p class="f1"><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_style_name}</a></p>
+           <p class="f1">{if $goods.buy_num}以有{$goods.buy_num}人购买{else}暂无人购买{/if}</p>
+           <font class="f1">
+           <!-- {if $goods.promote_price neq ""} -->
+          {$goods.promote_price}
+          <!-- {else}-->
+          {$goods.shop_price}
+          <!--{/if}-->
+           </font>
+        </div>
+  <!--{/foreach}-->
+ </div>
+</div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ 
+ <div class="blank"></div>
+<!-- {/if} -->
+
+ <!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/recommend_best.lbi" -->
+
+<!-- {if $best_goods} -->
+
+<div class="box cat_goods cat_goodsin">
+<h3>
+  <span>
+  <ul>
+ <li class="name_img">
+   <a  href="../search.php?intro=best" >精品推荐  </a>
+ </li> 
+   
+  </ul>
+  </span>  
+  <a class="more"  href="../search.php?intro=best">更多商品</a>
+</h3>
+
+
+
+
+
+<div class="box_1 cat_goods_box">
+<div class="clearfix goodsBox" style="border:none;">
+  <!--{foreach from=$best_goods item=goods}-->
+  <div class="goodsItem">
+       
+           <a href="{$goods.url}"><img src="{$goods.thumb}" alt="{$goods.name|escape:html}" class="goodsimg" /></a><br />
+           <p class="f1"><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_style_name}</a></p>
+           <p class="f1">{if $goods.buy_num}以有{$goods.buy_num}人购买{else}暂无人购买{/if}</p>
+           <font class="f1">
+           <!-- {if $goods.promote_price neq ""} -->
+          {$goods.promote_price}
+          <!-- {else}-->
+          {$goods.shop_price}
+          <!--{/if}-->
+           </font>
+        </div>
+  <!--{/foreach}-->
+ </div>
+</div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ 
+ <div class="blank"></div>
+<!-- {/if} -->
+
+ <!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/recommend_new.lbi" -->
+
+<!-- {if $new_goods} -->
+
+<div class="box cat_goods ">
+<h3>
+  <span>
+  <ul>
+ <li class="name_img">
+   <a  href="../search.php?intro=new" >新品上架  </a>
+ </li> 
+   
+  </ul>
+  </span>  
+  <a class="more"  href="../search.php?intro=new">更多商品</a>
+</h3>
+
+
+
+
+
+<div class="box_1 cat_goods_box">
+<div class="clearfix goodsBox" style="border:none;">
+  <!--{foreach from=$new_goods item=goods}-->
+  <div class="goodsItem">
+       
+           <a href="{$goods.url}"><img src="{$goods.thumb}" alt="{$goods.name|escape:html}" class="goodsimg" /></a><br />
+           <p class="f1"><a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_style_name}</a></p>     
+           <p class="f1">{if $goods.buy_num}以有{$goods.buy_num}人购买{else}暂无人购买{/if}</p>
+           <font class="f1">
+           <!-- {if $goods.promote_price neq ""} -->
+          {$goods.promote_price}
+          <!-- {else}-->
+          {$goods.shop_price}
+          <!--{/if}-->
+           </font>
+        </div>
+  <!--{/foreach}-->
+ </div>
+</div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </div>
+ 
+ <div class="blank"></div>
+<!-- {/if} -->
+
+ <!-- #EndLibraryItem -->
+<!-- TemplateEndEditable -->
+ 
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+
+
+    <!-- #BeginLibraryItem "/library/help.lbi" --><!-- #EndLibraryItem -->
+ 
+
+<!-- #BeginLibraryItem "/library/page_footer.lbi" --><!-- #EndLibraryItem -->
+<div class="qrcode">
+	<div class="bd">
+    <ul>
+      <li style="color: #e00;font-size: 16px;">安卓手机端下载</li>
+      <li><a href="http://www.ttjm.net/app/ttjm.apk"><img src="http://www.ttjm.n
+
+et/app/androidapp.png" width="120" height="120"></a></li>
+      <li class="codeAdv">
+<!--            <em class="hdtxt">安卓手机端</em>-->
+      </li>
+      <li style="color: #e00;font-size: 16px;">苹果手机端下载</li>
+      <li><a href="http://www.ttjm.net/app/ttjmios.ipa"><img src="http://www.ttj
+
+m.net/app/ttjmios.png" width="120" height="120"></a></li>
+      <li class="codeAdv">
+<!--            <em class="hdtxt">苹果手机端</em>-->
+      </li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

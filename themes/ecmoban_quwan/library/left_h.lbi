@@ -1,0 +1,13 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div id="category_tree">
+  <div class="tit">关于我们</div>
+  <!-- {foreach from=$artciles_list item=article} -->
+     <dl>
+     <dt><a style="text-decoration:none" href="{$article.url}" title="{$article.title|escape:html}" class="f6">{$article.short_title}</a></dt>
+     </dl>
+   <!-- {/foreach} -->
+</div>
+<div class="blank5"></div>
+<!--{foreach from=$new_articles item=article}-->
+       <li><a href="{$article.urls}" title="{$article.titles|escape:html}">{$article.short_titles|truncate:20:"...":true}</a></li>
+<!--{/foreach}-->
