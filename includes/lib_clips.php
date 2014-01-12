@@ -875,7 +875,7 @@ function get_comment_list($user_id, $page_size, $start)
     return $comments;
 }
 
-function get_nopaycomment($user_id)
+function get_nopaycomment($user_id, $getIds = false)
 {
     $sql = 'SELECT  DISTINCT g.goods_id,o.add_time  ' .
             'FROM ' . $GLOBALS['ecs']->table('order_goods') . ' AS g join  ' .
@@ -896,6 +896,10 @@ function get_nopaycomment($user_id)
         $userGoods[] = $row['goods_id'];
     }
     $uncommented = array_diff($userGoods, $commented);
+    if ($getIds)
+    {
+        return $uncommented;
+    }
     return count($uncommented);
 
 }

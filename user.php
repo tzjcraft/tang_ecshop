@@ -35,7 +35,7 @@ $not_login_arr =
 /* 显示页面的action列表 */
 $ui_arr = array('register', 'login', 'profile', 'order_list', 'order_detail', 'address_list', 'collection_list',
 'message_list', 'tag_list', 'get_password', 'reset_password', 'booking_list', 'add_booking', 'account_raply',
-'account_deposit', 'account_log', 'account_detail', 'act_account', 'pay', 'default', 'bonus', 'group_buy', 'group_buy_detail', 'affiliate', 'comment_list', 'validate_email', 'track_packages', 'transform_points', 'qpassword_name', 'get_passwd_question', 'check_answer', 'validate_user', 'send_sms_captcha', 'reset_password_by_captcha');
+'account_deposit', 'account_log', 'account_detail', 'act_account', 'pay', 'default', 'bonus', 'group_buy', 'group_buy_detail', 'affiliate', 'comment_list', 'await_comment', 'add_comment', 'validate_email', 'track_packages', 'transform_points', 'qpassword_name', 'get_passwd_question', 'check_answer', 'validate_user', 'send_sms_captcha', 'reset_password_by_captcha');
 
 /* 未登录处理 */
 if (empty($_SESSION['user_id']))
@@ -1247,6 +1247,61 @@ elseif ($action == 'comment_list')
     $smarty->assign('comment_list', get_comment_list($user_id, $pager['size'], $pager['start']));
     $smarty->assign('pager', $pager);
     $smarty->assign('uncommented', $uncommentedGoods);
+    $smarty->display('user_clips.dwt');
+}
+/* 显示未评论列表 */
+elseif ($action == 'await_comment')
+{
+    include_once(ROOT_PATH . 'includes/lib_clips.php');
+
+    $uncommentedGoodsIds = get_nopaycomment($user_id, true);
+
+    $sql = 'SELECT * FROM ' . $ecs->table('goods') . ' WHERE goods_id IN (' . implode(',', $uncommentedGoodsIds) . ')';
+    $res = $db->query($sql);
+    $uncommentedGoods = array();
+    while ($row = $db->fetchRow($res))
+    {
+        $uncommentedGoods[] = $row;
+    }
+    
+    $smarty->assign('uncommentedGoods', $uncommentedGoods);
+    $smarty->display('user_clips.dwt');
+}
+/* 添加评论 */
+elseif ($action == 'add_comment')
+{
+    include_once(ROOT_PATH . 'includes/lib_transaction.php');
+    $user_info = get_profile($user_id);
+    if (!$user_info)
+    {
+        show_message('请登录', $_LANG['relogin_lnk'], 'user.php?act=login', 'info');
+    }
+    if (isset($_POST['content']))
+    {
+        $goods_id = intval($_POST['id']);
+        $goods = goods_info($goods_id);
+        if (!$goods)
+        {
+            show_message('请指定一个待评价的商品！', '我的评价', 'user.php?act=comment_list', 'info');
+        }
+        $content = mysql_real_escape_string($_POST['content']);
+        $rank = intval($_POST['comment_rank']);
+        $sql = "INSERT INTO " . $ecs->table('comment') .
+                "(comment_type, id_value, email, user_name, content, comment_rank, add_time, ip_address, status, parent_id, user_id) VALUES " .
+                "('0', '" . $goods_id . "', '{$user_info['email']}', '{$user_info['user_name']}', '" . $content . "', '" . $rank . "', " . gmtime() . ", '" . real_ip() . "', '1', '0', '$user_id')";
+        $result = $GLOBALS['db']->query($sql);
+        $comment_id = $db->insert_id();
+        show_message('评价成功！', '我的评价', 'user.php?act=comment_list', 'info');
+    }
+    include_once(ROOT_PATH . 'includes/lib_clips.php');
+    $goods_id = isset($_GET['id']) && intval($_GET['id']) > 0 ? intval($_GET['id']) : 0;
+    $goods = goods_info($goods_id);
+    if (!$goods)
+    {
+        show_message('请指定一个待评价的商品！', '我的评价', 'user.php?act=comment_list', 'info');
+    }
+
+    $smarty->assign('goods', $goods);
     $smarty->display('user_clips.dwt');
 }
 

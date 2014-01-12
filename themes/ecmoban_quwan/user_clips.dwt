@@ -159,12 +159,83 @@
          <!-- {/if} -->
          <!--#我的留言 end-->
          <!-- *我的评论 start-->
-<!--{if $uncommented}-->
-        <h5><span>您有 <font class="f4">{$uncommented}</font> 个待评价的商品</span></h5>
-        <div class="blank"></div>
+        <!-- *待评论列表 start-->
+        <!-- {if $action eq 'await_comment'} -->
+          <h5><span><a href="/user.php?act=comment_list">{$lang.label_comment}</a></span><span>&nbsp;&nbsp;&nbsp;&nbsp;待评价</span></h5>
+          <div class="blank"></div>
+          <!--{foreach from=$uncommentedGoods item=goods} -->
+          <div class="f_l">
+          <b>商品名称: </b><font class="f4">{$goods.goods_name}</font>
+          </div>
+          <div class="f_r">
+          <a href="user.php?act=add_comment&id={$goods.goods_id}" title="添加评价" class="f6">添加评价</a>
+          </div>
+          <div class="msgBottomBorder"></div>
+          <!-- {/foreach} -->
+          <!--{/if} -->
+        <!-- *待评论列表 end-->
+        <!-- *添加商品评价 start-->
+<!-- {if $action eq 'add_comment'} -->
+        <!--评论表单 start-->
+<h5><span><a href="/user.php?act=comment_list">{$lang.label_comment}</a></span><span>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/user.php?act=await_comment">待评价</a></span></h5>
+          <div class="blank"></div>
+      <h5><span><b>商品名称: </b><font class="f4">{$goods.goods_name}</font></span></h5>
+<div class="blank"></div>
+      <div class="commentsList">
+      <form action="/user.php?act=add_comment" onsubmit="return submitComment(this)" method="post" name="commentForm" id="commentForm">
+       <table width="710" border="0" cellspacing="5" cellpadding="0">
+        <tr>
+          <td align="right">{$lang.comment_rank}：</td>
+          <td>
+          <input name="comment_rank" type="radio" value="1" id="comment_rank1" /> <img src="../images/stars1.gif" />
+          <input name="comment_rank" type="radio" value="2" id="comment_rank2" /> <img src="../images/stars2.gif" />
+          <input name="comment_rank" type="radio" value="3" id="comment_rank3" /> <img src="../images/stars3.gif" />
+          <input name="comment_rank" type="radio" value="4" id="comment_rank4" /> <img src="../images/stars4.gif" />
+          <input name="comment_rank" type="radio" value="5" checked="checked" id="comment_rank5" /> <img src="../images/stars5.gif" />
+          </td>
+        </tr>
+        <tr>
+          <td align="right" valign="top">{$lang.comment_content}：</td>
+          <td>
+          <textarea name="content" class="inputBorder" style="height:50px; width:620px;"></textarea>
+          <input type="hidden" name="id" value="{$goods.goods_id}" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+          <input name="" type="submit"  value="" class="f_r" style="border:none; background:url(../images/commentsBnt.gif); width:75px; height:21px; margin-right:8px;">
+          </td>
+        </tr>
+      </table>
+      </form>
+      </div>
+<script type="text/javascript">
+{literal}
+function submitComment(frm)
+{
+  var cmt = new Object;
+
+  cmt.content         = frm.elements['content'].value;
+   if (cmt.content.length == 0)
+   {
+      alert('您没有输入评论的内容.');
+      return false;
+   }
+   return true;
+}
+{/literal}
+</script>
+      <!--评论表单 end-->
 <!--{/if}-->
+        <!-- *添加商品评价 end-->
+
+         <!-- *我的评论 start-->
           <!-- {if $action eq 'comment_list'} -->
-          <h5><span>{$lang.label_comment}</span></h5>
+            <!--{if $uncommented}-->
+                <h5><span>您有 <font class="f4">{$uncommented}</font> 个待评价的商品</span></h5>
+                <div class="blank"></div>
+            <!--{/if}-->
+          <h5><span>{$lang.label_comment}&nbsp;&nbsp;&nbsp;&nbsp;</span><span><a href="/user.php?act=await_comment">待评价</a></span></h5>
           <div class="blank"></div>
           <!--{foreach from=$comment_list item=comment} -->
           <div class="f_l">
