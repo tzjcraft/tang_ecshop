@@ -196,8 +196,41 @@ if (!empty($tmp[0]) && $tmp[0] == 'desc') {
         }
     }
 
+    /* 我的小伙伴 - 配件 start */
+    $sql = "SELECT parent_id, goods_id, goods_price FROM " . $ecs->table('group_goods') .
+            " WHERE parent_id = {$goods_id} ";
+    $res = $db->query($sql);
+    $partnerIds = array();
+    while ($row = $db->fetchRow($res))
+    {
+        $partnerIds[] = $row['goods_id'];
+    }
+    $junior_partner = array();
+    if ($partnerIds)
+    {
+        $sql = 'SELECT * FROM ' . $ecs->table('goods') . ' WHERE goods_id IN (' . implode(',', $partnerIds) . ')';
+        $res = $db->query($sql);
+        while ($row = $db->fetchRow($res))
+        {
+            $junior_partner[] = array(
+                "goods_id" => $row['goods_id'],
+                "name" => $row['goods_name'],
+                "market_price" => price_format($row['market_price'], false),
+                "shop_price" => price_format($row['shop_price'], false),
+                "promote_price" => price_format($row['promote_price'], false),
+                "img" => array(
+                    'url' => API_DATA('PHOTO', $v['original_img']),
+                    'thumb' => API_DATA('PHOTO', $v['goods_img']),
+                    'small' => API_DATA('PHOTO', $v['goods_thumb'])
+                )
+            );
+        }
+    }
+    
+    $data['junior_partner'] = $junior_partner;
+    /* 我的小伙伴 - 配件 end */
     // print_r($data);exit;
-	GZ_Api::outPut(API_DATA('GOODS', $data));
+    GZ_Api::outPut(API_DATA('GOODS', $data));
 }
 
 

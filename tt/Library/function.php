@@ -411,7 +411,8 @@ function API_DATA($type, $readData)
 				}
 				$outData['specification'][] = $value;
 			}
-			break;
+            $outData['junior_partner'] = $readData['junior_partner'];
+            break;
         default:
             break;
     }
