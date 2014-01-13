@@ -1256,12 +1256,15 @@ elseif ($action == 'await_comment')
 
     $uncommentedGoodsIds = get_nopaycomment($user_id, true);
 
-    $sql = 'SELECT * FROM ' . $ecs->table('goods') . ' WHERE goods_id IN (' . implode(',', $uncommentedGoodsIds) . ')';
-    $res = $db->query($sql);
     $uncommentedGoods = array();
-    while ($row = $db->fetchRow($res))
+    if ($uncommentedGoodsIds)
     {
-        $uncommentedGoods[] = $row;
+        $sql = 'SELECT * FROM ' . $ecs->table('goods') . ' WHERE goods_id IN (' . implode(',', $uncommentedGoodsIds) . ')';
+        $res = $db->query($sql);
+        while ($row = $db->fetchRow($res))
+        {
+            $uncommentedGoods[] = $row;
+        }
     }
     
     $smarty->assign('uncommentedGoods', $uncommentedGoods);
