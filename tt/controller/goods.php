@@ -219,9 +219,9 @@ if (!empty($tmp[0]) && $tmp[0] == 'desc') {
                 "shop_price" => price_format($row['shop_price'], false),
                 "promote_price" => price_format($row['promote_price'], false),
                 "img" => array(
-                    'url' => API_DATA('PHOTO', $v['original_img']),
-                    'thumb' => API_DATA('PHOTO', $v['goods_img']),
-                    'small' => API_DATA('PHOTO', $v['goods_thumb'])
+                    'url' => API_DATA('PHOTO', $row['original_img']),
+                    'thumb' => API_DATA('PHOTO', $row['goods_img']),
+                    'small' => API_DATA('PHOTO', $row['goods_thumb'])
                 )
             );
         }
