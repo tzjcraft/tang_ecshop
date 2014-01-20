@@ -1,0 +1,22 @@
+{include file="pageheader.htm"}
+<div class="main-div">
+    <form method="post" action="notification.php" name="theForm" onsubmit="return validate()">
+        <table width="100%" >
+            <tr>
+                <td class="label">TITLE:</td>
+                <td><input type="text" name="title" maxlength="60" size="40" value="{$notification.title}" />{$lang.require_field}</td>
+            </tr>
+
+            <tr><td class="label">CONTENT:</td><td>{$FCKeditor}</td></tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="{$lang.button_submit}" class="button" />
+                    <input type="reset" value="{$lang.button_reset}" class="button" />
+                    <input type="hidden" name="act" value="update" />
+                    <input type="hidden" name="id" value="{$notification.notification_id}" />    </td>
+            </tr>
+        </table>
+
+    </form>
+</div>
+{include file="pagefooter.htm"}

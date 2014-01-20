@@ -148,6 +148,9 @@ if (!defined('IN_ECS'))
     $purview['attention_list']       = 'attention_list';
     $purview['email_list']           = 'email_list';
     $purview['magazine_list']        = 'magazine_list';
-    $purview['view_sendlist']        = 'view_sendlist';
+    $purview['view_sendlist'] = 'view_sendlist';
 
+    //通知管理权限
+$purview['add_notification'] = 'add_notification';
+$purview['list_notification'] = 'list_notification';
 ?>
